@@ -8,10 +8,10 @@ Beispiel für height = 4:
 *******
 */
 
-function printTree(heigth: number): void{
-  let spaces: number = heigth - 1;
+function printTree(height: number): void{
+  let spaces: number = height - 1;
   let stars: number = 1;
-  for( let i: number = 0; i < heigth; i++){
+  for(let currHeight: number = 0; currHeight < height; currHeight++){
     for( let j: number = 0; j < spaces; j++){
       process.stdout.write(" ");
     }
@@ -24,5 +24,6 @@ function printTree(heigth: number): void{
   }
 }
 
-const heigth: number = 10;
- printTree(heigth);
+const height: number = 10;
+ printTree(height);
+

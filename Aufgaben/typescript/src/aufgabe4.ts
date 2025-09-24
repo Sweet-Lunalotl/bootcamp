@@ -8,14 +8,9 @@ Output: 2
  */
 
 function count(words: string[], letter: string): number{
-  const newLetter: string = letter.toLowerCase();
-  const newWords: string[] = words;
   let amount: number = 0;
-  for(let i: number = 0; i < newWords.length; i++){
-    newWords[i] = newWords[i].toLowerCase();
-  }
-  for(let i: number = 0; i < newWords.length; i++){
-    if(newWords[i].includes(newLetter)){
+  for(let i: number = 0; i < words.length; i++){
+    if(words[i].toLowerCase().includes(letter.toLowerCase())){
       amount+=1;
     }
   }
