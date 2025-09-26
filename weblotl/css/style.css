@@ -1,0 +1,66 @@
+body {
+  background-color: #cec2ff;
+}
+
+a:link{
+  color: #1D421E;
+}
+a:visited{
+  color: #1D421E;
+}
+a:active{
+  color: #c2ffc3;
+}
+
+.card{
+  box-shadow: 3px 3px 10px 5px #1D421E;
+  width: 55ch;
+  display: grid;
+  grid-template-columns: [line1] auto [line2] 1fr;
+  grid-template-rows: [row1] 2em [row2] 1.5em [row3] 1.5em [row4] auto;
+  grid-template-areas:
+    "name pic"
+    "title pic"
+    "titlelong titlelong"
+    "list list"
+    ;
+}
+
+.name{
+  grid-area: name;
+}
+
+.name h1{
+
+}
+
+.pic{
+  grid-area: pic;
+}
+
+.title{
+  grid-area: title;
+}
+
+.title h2{
+  padding: 0;
+}
+
+.titlelong{
+  grid-area: titlelong;
+}
+
+.titlelong h2{
+  padding: 0;
+}
+
+.list{
+  grid-area: list;
+}
+
+
+
+
+.profilepic{
+  height: 5em;
+}
