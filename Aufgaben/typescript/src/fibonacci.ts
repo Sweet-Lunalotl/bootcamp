@@ -20,8 +20,25 @@ function printFibonacciSequenz(number: number, sequence: number[]): void{
   console.log(stringOut);
 }
 
+function fiboRec(n: number): number{
+    if (n<=1){
+        return n;
+    }
+    else{
+        return fiboRec(n-1)+fiboRec(n-2);
+    }
+}
 
 
-//here you can enter the number to which you want the fibonacci sequenz calculated
-const n: number = 20;
-fibonacciSequenz(n);
+const fiboUntil: number = 20;
+let curr: number = 0;
+let i: number = 0;
+
+
+while (curr <= fiboUntil){
+    curr = fiboRec(i);
+    i++;
+    if (curr <= fiboUntil){
+        console.log(curr)
+    }
+}
