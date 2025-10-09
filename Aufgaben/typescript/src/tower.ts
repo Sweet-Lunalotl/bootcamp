@@ -39,9 +39,7 @@ class tower{
       throw new Error("Function moveIsLegal: fromTower or toTower have an invalid value")
     }
     //check if the tower a disc should be moved from isn't empty
-    let sumOfTower: number = 0;
-    this.towers[fromTower].forEach((value: number) => {sumOfTower = sumOfTower + value});
-    if( sumOfTower === 0){
+    if(towers.sumOfTower(fromTower) === 0){
       throw new Error("Function moveIsLegal: No disc at adressed tower");
     }
     //the top disc of both the to and the from-Tower
@@ -86,17 +84,54 @@ class tower{
     return this.discs-1;
   }
 
+  private sumOfTower(tower: number): number{
+    let sum: number = 0;
+    this.towers[0].forEach((value: number) => {sum = sum + value});
+    return sum;
+  }
+
+  private solve(stack: number): void{
+    //define which role each tower plays
+    const destination: number = 2;
+    let buffer: number;
+    let start: number;
+    if(towers.sumOfTower(0) === 0){
+      buffer = 0;
+      start = 1;
+    }
+    else if(towers.sumOfTower(1) === 0){
+      buffer = 1;
+      start = 0;
+    }
+    else{
+      throw new Error("solve: How TF did we get here?!")
+    }
+
+
+
+  }
+
+
   //currently for debugging porpoises
-  public run(): void{
+  public debugLOL(): void{
     console.log(towers.buidInitalTowers());
     console.log(towers.moveIsLegal(0, 1))
     towers.moveDisc(0, 2)
     console.log(towers)
+
+    // solve for disc
+    // solve for disc -1
+    //solve for disc -2
   }
 
+
+  public run(): void{
+    for(let stack = this.discs; stack > 0; stack--){
+      towers.solve(stack);
+    }
+  }
+//end of class
 }
-
-
 
 const towers = new tower(3);
 towers.run();
