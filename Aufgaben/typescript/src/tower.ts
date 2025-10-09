@@ -9,8 +9,8 @@ class tower{
   /**
    * Builds the initial tower configuration with n-discs
    *
-   * @private
    * @returns A two Dimensional array filled with n numbers in each dimension
+   * @private
    */
   private buidInitalTowers(): number[][]{
     for(let itower: number = 0; itower < 3; itower++){
@@ -45,25 +45,53 @@ class tower{
       throw new Error("Function moveIsLegal: No disc at adressed tower");
     }
     //the top disc of both the to and the from-Tower
-    let topFrom: number = 0;
-    let topTo: number = 0;
     //find to disc of toTower and fromTower
+    let topFrom: number = this.towers[fromTower][this.findIndexOfTopDisc(fromTower)];
+    let topTo: number = this.towers[toTower][this.findIndexOfTopDisc(toTower)];
+    return topTo < topFrom;
+  }
+
+  /**
+   * Moves the top disc of fromTower to the highest possible index of toTower
+   *
+   * @param fromTower - From which Tower a disc gets removed
+   * @param toTower - Destination of removed disc
+   * @private
+   */
+  private moveDisc(fromTower: number, toTower: number): void{
+    if(!this.moveIsLegal(fromTower, toTower)){
+      throw new Error("moveDisc: Oi! You should check if your move is legal /before/ calling this function. You do love bugs, don't you?")
+    }
+    if(this.findIndexOfTopDisc(toTower) === this.discs-1){
+      this.towers[toTower][this.findIndexOfTopDisc(toTower)] = this.towers[fromTower][this.findIndexOfTopDisc(fromTower)];
+    }
+    else{
+      this.towers[toTower][this.findIndexOfTopDisc(toTower)-1] = this.towers[fromTower][this.findIndexOfTopDisc(fromTower)];
+    }
+    this.towers[fromTower][this.findIndexOfTopDisc(fromTower)] = 0;
+  }
+
+  /**
+   *
+   * @param tower - The tower to which the top disc should be found. Valid values are 0, 1, 2
+   * @returns Index of the top disc. If it returns n where n = discs-1 then there is no disc at that tower
+   * @private
+   */
+  private findIndexOfTopDisc(tower: number): number{
     for(let discIndex: number = 0; discIndex < this.discs; discIndex++){
-      if(topFrom === 0 && this.towers[fromTower][discIndex] != 0){
-        topFrom = this.towers[fromTower][discIndex];
-      }
-      if(topTo === 0 && this.towers[toTower][discIndex] != 0){
-        topFrom = this.towers[fromTower][discIndex];
+      if(this.towers[tower][discIndex] != 0){
+        return discIndex;
       }
     }
-    return topTo < topFrom;
+    return this.discs-1;
   }
 
   //currently for debugging porpoises
   public run(): void{
     console.log(towers.buidInitalTowers());
-    console.log(towers.moveIsLegal(1, 0))
-
+    console.log(towers.moveIsLegal(0, 1))
+    towers.moveDisc(0, 2)
+    console.log(towers)
   }
 
 }
