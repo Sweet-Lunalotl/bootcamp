@@ -1,7 +1,14 @@
+import { run } from 'node:test';
+
 class tower{
   private towers: number[][] = [[1], [0], [0]];
   private discs: number;
 
+  /**
+   * Creates new Towers
+   *
+   * @param discs - amount of disc for the first tower
+   */
   public constructor(discs: number) {
     this.discs = discs;
   }
@@ -12,7 +19,7 @@ class tower{
    * @returns A two Dimensional array filled with n numbers in each dimension
    * @private
    */
-  private buidInitalTowers(): number[][]{
+  private buidInitalTowers(): void{
     for(let itower: number = 0; itower < 3; itower++){
       for(let discName: number = 2; discName <= this.discs; discName++){
         if (itower === 0){
@@ -23,7 +30,6 @@ class tower{
         }
       }
     }
-    return this.towers;
   }
 
   /**
@@ -70,6 +76,7 @@ class tower{
   }
 
   /**
+   * Finds the index of top disc
    *
    * @param tower - The tower to which the top disc should be found. Valid values are 0, 1, 2
    * @returns Index of the top disc. If it returns n where n = discs-1 then there is no disc at that tower
@@ -84,54 +91,95 @@ class tower{
     return this.discs-1;
   }
 
+  /**
+   * Calculates the sum of all discs at the specified tower
+   *
+   * @param tower - The tower of which the sum will be calculated. Valid values are 0, 1, 2
+   * @returns The sum of all discs at the tower
+   * @private
+   */
   private sumOfTower(tower: number): number{
     let sum: number = 0;
-    this.towers[0].forEach((value: number) => {sum = sum + value});
+    this.towers[tower].forEach((value: number) => {sum = sum + value});
     return sum;
   }
 
+  /**
+   * Solve the problem towers of Hanoi for the specified amount of discs
+   *
+   * @param stack - Amount of disc the problem should be solved for
+   * @private
+   */
   private solve(stack: number): void{
     //define which role each tower plays
-    const destination: number = 2;
+    const end: number = 2;
     let buffer: number;
     let start: number;
-    if(towers.sumOfTower(0) === 0){
+    if(this.sumOfTower(0) === 0){
       buffer = 0;
       start = 1;
     }
-    else if(towers.sumOfTower(1) === 0){
+    else if(this.sumOfTower(1) === 0){
       buffer = 1;
       start = 0;
     }
     else{
       throw new Error("solve: How TF did we get here?!")
     }
+    //first step is different depending on the stack size
+    if(stack % 2 === 0){
+      this.saveMove(start, end);
+    }
+    else{
+      this.saveMove(start, buffer);
+    }
+
+    //alles
+    //stack-1 Scheiben müssen im Buffer gestapelt werden um scheibe = stack von Start zu end zu schieben. Dann vorbei
+
+    //1. Scheibe 1 bewegen (done!!!)
+
+    //2 auf das andere
+    // 1 auf zwei
 
 
+    // 3 aufs leere
+    // 1 nicht 3
+    // 2 auf 3
+    // 1 auf 2
+
+
+    //meow
 
   }
 
+  private saveMove(fromTower: number, toTower: number): void{
+    if(this.moveIsLegal(fromTower, toTower)){
+      this.moveDisc(fromTower, toTower);
+    }
+  }
 
-  //currently for debugging porpoises
-  public debugLOL(): void{
-    console.log(towers.buidInitalTowers());
-    console.log(towers.moveIsLegal(0, 1))
-    towers.moveDisc(0, 2)
+
+  /**
+   * if this function is in the code, it's still a wip because this is for debugging
+   */
+  public justHere(): void{
+    towers.buidInitalTowers();
     console.log(towers)
-
-    // solve for disc
-    // solve for disc -1
-    //solve for disc -2
   }
 
 
   public run(): void{
+    towers.buidInitalTowers();
     for(let stack = this.discs; stack > 0; stack--){
       towers.solve(stack);
     }
   }
-//end of class
+
 }
 
 const towers = new tower(3);
-towers.run();
+towers.justHere();
+
+
+
