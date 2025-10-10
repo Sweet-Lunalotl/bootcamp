@@ -10,14 +10,14 @@ function fibonacciSequenz(number: number): void{
 
 
 function printFibonacciSequenz(number: number, sequence: number[]): void{
-  console.log("The fibonacci sequenz until", number)
-  if(number === 0){
-    console.log(number);
-    return;
-  }
-  let stringOut: string = "";
-  sequence.forEach((item: number) => {stringOut = stringOut + item.toString() + " "});
-  console.log(stringOut);
+    console.log("The fibonacci sequenz until", number)
+    if(number === 0){
+        console.log(number);
+        return;
+    }
+    let stringOut: string = "";
+    sequence.forEach((item: number) => {stringOut = stringOut + item.toString() + " "});
+    console.log(stringOut);
 }
 
 function fiboRec(n: number): number{
@@ -29,16 +29,23 @@ function fiboRec(n: number): number{
     }
 }
 
-
-const fiboUntil: number = 20;
-let curr: number = 0;
-let i: number = 0;
-
-
-while (curr <= fiboUntil){
-    curr = fiboRec(i);
-    i++;
-    if (curr <= fiboUntil){
-        console.log(curr)
+function fibonacciSequenzRec(fiboUntil: number){
+    let curr: number = 0;
+    let i: number = 0;
+    const sequenz: number[] = [];
+    while (curr <= fiboUntil){
+        curr = fiboRec(i);
+        i++;
+        if (curr <= fiboUntil){
+            sequenz.push(curr);
+        }
     }
+    printFibonacciSequenz(fiboUntil, sequenz);
 }
+
+
+
+
+fibonacciSequenz(20);
+fibonacciSequenzRec(20);
+
