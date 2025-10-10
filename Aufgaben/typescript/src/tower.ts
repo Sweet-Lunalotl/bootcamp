@@ -45,7 +45,7 @@ class tower{
       throw new Error("Function moveIsLegal: fromTower or toTower have an invalid value")
     }
     //check if the tower a disc should be moved from isn't empty
-    if(towers.sumOfTower(fromTower) === 0){
+    if(towers.sumOfTowerWhole(fromTower) === 0){
       throw new Error("Function moveIsLegal: No disc at adressed tower");
     }
     //the top disc of both the to and the from-Tower
@@ -95,10 +95,19 @@ class tower{
    * Calculates the sum of all discs at the specified tower
    *
    * @param tower - The tower of which the sum will be calculated. Valid values are 0, 1, 2
+   * @param checkedLayers
    * @returns The sum of all discs at the tower
    * @private
    */
-  private sumOfTower(tower: number): number{
+  private sumOfTower(tower: number, checkedLayers: number): number{
+    let sum: number = 0;
+    for(let i: number = 0; i <= checkedLayers; i++){
+      sum = sum + this.towers[tower][i];
+    }
+    return sum;
+  }
+
+  private sumOfTowerWhole(tower: number): number{
     let sum: number = 0;
     this.towers[tower].forEach((value: number) => {sum = sum + value});
     return sum;
@@ -115,11 +124,11 @@ class tower{
     const end: number = 2;
     let buffer: number;
     let start: number;
-    if(this.sumOfTower(0) === 0){
+    if(this.sumOfTower(0, stack) === 0){
       buffer = 0;
       start = 1;
     }
-    else if(this.sumOfTower(1) === 0){
+    else if(this.sumOfTower(1, stack) === 0){
       buffer = 1;
       start = 0;
     }
@@ -140,21 +149,73 @@ class tower{
     //1. Scheibe 1 bewegen (done!!!)
 
     // 2 und 3 so lange machen bis sumTower(start) === 0 -> exit
-    //2. top disc (td) von start auf leeren Tower
-    //3. td-1 Scheiben (also bei td=3, die Scheiben 1, 2) auf den Tower mit td legen
+    //2. gröchste oben liegende Disc verschieben
+    //3. zweit gröchste oben liegende Disc verschieben
+    //4. dritt gröchste oben liegende Disc verschieben
+
+    //verschiebe Regeln:
+      // a: verschiebe auf kleine disc die einen anderen Modulo wert als die zu verschiebende Disk hat
+      // b: verschiebe auf leeren Turm
+      // c: nicht verschieben
+
+
+    while (this.sumOfTower(start, stack) != 0){
+      //Hier sehen sie meinen moment der erkenntnis:
+        //EINE GERADE KOMMT IM;MER AUF EINE UNGERADE, Ich glaube ich ahbe es gelöst!!!!!!!1
 
 
 
+    }
 
-
-
-    //meow
 
   }
+
+  private findTopDisc(tower: number): number{
+    return this.towers[tower][this.findIndexOfTopDisc(tower)];
+  }
+
+  /**
+   * finds the tower of the specified number if that number is the topDisc
+   *
+   * @param number - The number you are looking for
+   * @ returns - The Tower of which the number is the top
+   * @private
+   */
+  private findNumberTower(number: number): number{
+    if(number === this.towers[0][this.findIndexOfTopDisc(0)]){
+      return 0;
+    }
+    else if(number === this.towers[1][this.findIndexOfTopDisc(1)]){
+      return 1;
+    }
+    else if(number === this.towers[2][this.findIndexOfTopDisc(2)]){
+      return 2;
+    }
+    else{
+      throw new Error("findNumberTower: Dude, the number is not on the top, your code does not work")
+    }
+  }
+
+
+  private moveToEmptyTower(fromTower: number, otherTowerA: number, otherTowerB: number, stack: number): void {
+    if(this.sumOfTower(otherTowerA, stack) === 0){
+      this.saveMove(fromTower, otherTowerA);
+    }
+    else if(this.sumOfTower(otherTowerB, stack) === 0){
+      this.saveMove(fromTower, otherTowerA);
+    }
+    else{
+      throw new Error("moveToEmptyTower: Somehow there is no empty Tower")
+    }
+  }
+
 
   private saveMove(fromTower: number, toTower: number): void{
     if(this.moveIsLegal(fromTower, toTower)){
       this.moveDisc(fromTower, toTower);
+    }
+    else{
+      throw new Error("saveMove: This was not a save move")
     }
   }
 
