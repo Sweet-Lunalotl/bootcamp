@@ -139,14 +139,13 @@ class tower{
 
     //1. Scheibe 1 bewegen (done!!!)
 
-    //2 auf das andere
-    // 1 auf zwei
+    // 2 und 3 so lange machen bis sumTower(start) === 0 -> exit
+    //2. top disc (td) von start auf leeren Tower
+    //3. td-1 Scheiben (also bei td=3, die Scheiben 1, 2) auf den Tower mit td legen
 
 
-    // 3 aufs leere
-    // 1 nicht 3
-    // 2 auf 3
-    // 1 auf 2
+
+
 
 
     //meow
