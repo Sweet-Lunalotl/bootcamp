@@ -40,7 +40,7 @@ class tower{
    * @return false - The top disc of fromTower is bigger than the topDisc of toTower
    * @private
    */
-  private moveIsLegal(fromTower: number, toTower: number): boolean{
+  private moveIsLegal(fromTower: number, toTower: number, stack: number): boolean{
     if(fromTower === toTower || fromTower > 2 || toTower > 2 || fromTower < 0 || toTower < 0){
       throw new Error("Function moveIsLegal: fromTower or toTower have an invalid value")
     }
@@ -50,9 +50,28 @@ class tower{
     }
     //the top disc of both the to and the from-Tower
     //find to disc of toTower and fromTower
-    let topFrom: number = this.towers[fromTower][this.findIndexOfTopDisc(fromTower)];
-    let topTo: number = this.towers[toTower][this.findIndexOfTopDisc(toTower)];
-    return topTo < topFrom;
+    const topFrom: number = this.findTopDisc(fromTower);
+    let topTo: number = this.findTopDisc(toTower);
+
+    if(this.findIndexOfTopDisc(fromTower) > stack){
+      throw new Error("moveIsLegal: somehow your fromTower isn't within what should be solved")
+    }
+    else if(this.findIndexOfTopDisc(toTower) > stack){
+      topTo = 0;
+    }
+
+
+    if(topTo < topFrom && topFrom % 2 != topTo % 2){
+      return true;
+    }
+    else if(topTo === 0){
+      return true
+    }
+    else{
+      return false;
+    }
+
+
   }
 
   /**
@@ -63,14 +82,11 @@ class tower{
    * @private
    */
   private moveDisc(fromTower: number, toTower: number): void{
-    if(!this.moveIsLegal(fromTower, toTower)){
-      throw new Error("moveDisc: Oi! You should check if your move is legal /before/ calling this function. You do love bugs, don't you?")
-    }
     if(this.findIndexOfTopDisc(toTower) === this.discs-1){
-      this.towers[toTower][this.findIndexOfTopDisc(toTower)] = this.towers[fromTower][this.findIndexOfTopDisc(fromTower)];
+      this.towers[toTower][this.findIndexOfTopDisc(toTower)] = this.findTopDisc(fromTower);
     }
     else{
-      this.towers[toTower][this.findIndexOfTopDisc(toTower)-1] = this.towers[fromTower][this.findIndexOfTopDisc(fromTower)];
+      this.towers[toTower][this.findIndexOfTopDisc(toTower)-1] = this.findTopDisc(fromTower);
     }
     this.towers[fromTower][this.findIndexOfTopDisc(fromTower)] = 0;
   }
@@ -136,11 +152,12 @@ class tower{
       throw new Error("solve: How TF did we get here?!")
     }
     //first step is different depending on the stack size
+    //move disc one to deignated tower
     if(stack % 2 === 0){
-      this.saveMove(start, end);
+      this.saveMove(start, end, stack);
     }
     else{
-      this.saveMove(start, buffer);
+      this.saveMove(start, buffer, stack);
     }
 
     //alles
@@ -148,7 +165,7 @@ class tower{
 
     //1. Scheibe 1 bewegen (done!!!)
 
-    // 2 und 3 so lange machen bis sumTower(start) === 0 -> exit
+    // 2 bis 4 so lange machen bis sumTower(start) === 0 -> exit
     //2. gröchste oben liegende Disc verschieben
     //3. zweit gröchste oben liegende Disc verschieben
     //4. dritt gröchste oben liegende Disc verschieben
@@ -158,11 +175,43 @@ class tower{
       // b: verschiebe auf leeren Turm
       // c: nicht verschieben
 
+    let first: number = 0;
+    let second: number = 0;
+    let third: number = 0;
+    const topDiscs: number[] = [];
 
     while (this.sumOfTower(start, stack) != 0){
-      //Hier sehen sie meinen moment der erkenntnis:
-        //EINE GERADE KOMMT IM;MER AUF EINE UNGERADE, Ich glaube ich ahbe es gelöst!!!!!!!1
+      topDiscs.push(this.findTopDiscStack(0, stack));
+      topDiscs.push(this.findTopDiscStack(1, stack));
+      topDiscs.push(this.findTopDiscStack(2, stack));
 
+      //decide the priorities of the tries
+      for(let i: number = 0; i < 3; i++){
+        let maxDisc: number = 0;
+        if(topDiscs[i] > maxDisc){
+          maxDisc = topDiscs[i];
+          first = i;
+        }
+      }
+      for(let i: number = 0; i < 3; i++){
+        let maxDisc: number = 0;
+        if(i != first && topDiscs[i] > maxDisc){
+          maxDisc = topDiscs[i];
+          second = i;
+        }
+      }
+      for(let i: number = 0; i < 3; i++){
+        let maxDisc: number = 0;
+        if(i != first && i != second && topDiscs[i] > maxDisc){
+          maxDisc = topDiscs[i];
+          third = i;
+        }
+      }
+      if(first === second || second === third || first === third){
+        throw new Error("For the love of god, get your prios straight")
+      }
+
+      //an dieser Stellen sollen dann alle drei Prioritäten auf alle drei tower geprüft werden und das schnellste verschieben soll gemacht werden. Bitte erst prüfen ob es auf die Endposition kann
 
 
     }
@@ -172,6 +221,15 @@ class tower{
 
   private findTopDisc(tower: number): number{
     return this.towers[tower][this.findIndexOfTopDisc(tower)];
+  }
+
+  private findTopDiscStack(tower: number, stack: number): number{
+    if(this.findIndexOfTopDisc(0) <= stack){
+      return this.findTopDisc(0);
+    }
+    else{
+      return 0;
+    }
   }
 
   /**
@@ -197,21 +255,11 @@ class tower{
   }
 
 
-  private moveToEmptyTower(fromTower: number, otherTowerA: number, otherTowerB: number, stack: number): void {
-    if(this.sumOfTower(otherTowerA, stack) === 0){
-      this.saveMove(fromTower, otherTowerA);
-    }
-    else if(this.sumOfTower(otherTowerB, stack) === 0){
-      this.saveMove(fromTower, otherTowerA);
-    }
-    else{
-      throw new Error("moveToEmptyTower: Somehow there is no empty Tower")
-    }
-  }
 
 
-  private saveMove(fromTower: number, toTower: number): void{
-    if(this.moveIsLegal(fromTower, toTower)){
+
+  private saveMove(fromTower: number, toTower: number, stack: number): void{
+    if(this.moveIsLegal(fromTower, toTower, stack)){
       this.moveDisc(fromTower, toTower);
     }
     else{
