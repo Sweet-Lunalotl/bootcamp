@@ -34,17 +34,18 @@ class tower{
    *
    * @param fromTower - The tower of which the top disc should be moved. Valid values are 0, 1, 2
    * @param toTower - The tower to which the disc should be moved. Valid values are 0, 1, 2
+   * @param stack - The number of stacks the tower should be solved for
    * @return true - The top disc of fromTower can be moved to ToTower
    * @return false - The top disc of fromTower is bigger than the topDisc of toTower
    * @private
    */
   private moveIsLegal(fromTower: number, toTower: number, stack: number): boolean{
-    if(fromTower === toTower || fromTower > 2 || toTower > 2 || fromTower < 0 || toTower < 0){
-      throw new Error("Function moveIsLegal: fromTower or toTower have an invalid value")
+    if(fromTower > 2 || toTower > 2 || fromTower < 0 || toTower < 0){
+      throw new Error("moveIsLegal: fromTower or toTower have an invalid value")
     }
     //check if the tower a disc should be moved from isn't empty
     if(towers.sumOfTowerWhole(fromTower) === 0){
-      throw new Error("Function moveIsLegal: No disc at adressed tower");
+      throw new Error("moveIsLegal: No disc at adressed tower");
     }
     //the top disc of both the to and the from-Tower
     //find to disc of toTower and fromTower
@@ -57,9 +58,12 @@ class tower{
     else if(this.findIndexOfTopDisc(toTower) > stack){
       topTo = 0;
     }
+    if(fromTower === toTower){
+      return false;
+    }
 
     //one could argue that this would belong in a different method called move is smart or something
-    if(topTo < topFrom && topFrom % 2 != topTo % 2){
+    if(topTo > topFrom && topFrom % 2 != topTo % 2){
       return true;
     }
     else if(topTo === 0){
@@ -68,8 +72,6 @@ class tower{
     else{
       return false;
     }
-
-
   }
 
   /**
@@ -80,7 +82,7 @@ class tower{
    * @private
    */
   private moveDisc(fromTower: number, toTower: number): void{
-    if(this.findIndexOfTopDisc(toTower) === this.discs-1){
+    if(this.findTopDisc(toTower) === 0){
       this.towers[toTower][this.findIndexOfTopDisc(toTower)] = this.findTopDisc(fromTower);
     }
     else{
@@ -158,7 +160,7 @@ class tower{
       this.saveMove(start, buffer, stack);
     }
 
-    console.log(this.towers);
+    console.log("after moving 1:", this.towers);
 
     //alles
     //stack-1 Scheiben müssen im Buffer gestapelt werden um scheibe = stack von Start zu end zu schieben. Dann vorbei
@@ -184,30 +186,32 @@ class tower{
       topDiscs.push(this.findTopDiscStack(0, stack));
       topDiscs.push(this.findTopDiscStack(1, stack));
       topDiscs.push(this.findTopDiscStack(2, stack));
-
       //decide the priorities of the tries
       //there is probably a way to code this cleaner
+      let maxDisc: number = 0;
       for(let i: number = 0; i < 3; i++){
-        let maxDisc: number = 0;
-        if(topDiscs[i] > maxDisc){
+        if(topDiscs[i] >= maxDisc){
           maxDisc = topDiscs[i];
           first = i;
         }
       }
+      maxDisc = 0;
       for(let i: number = 0; i < 3; i++){
-        let maxDisc: number = 0;
-        if(i != first && topDiscs[i] > maxDisc){
+        if(i != first && topDiscs[i] >= maxDisc){
           maxDisc = topDiscs[i];
           second = i;
         }
       }
+      maxDisc = 0;
       for(let i: number = 0; i < 3; i++){
-        let maxDisc: number = 0;
-        if(i != first && i != second && topDiscs[i] > maxDisc){
+        if(i != first && i != second && topDiscs[i] >= maxDisc){
           maxDisc = topDiscs[i];
           third = i;
         }
       }
+      console.log("first:", first);
+      console.log("second:", second);
+      console.log("third:", third);
       if(first === second || second === third || first === third){
         throw new Error("solve: For the love of god, get your prios straight")
       }
@@ -250,7 +254,7 @@ class tower{
       else if(this.moveIsLegal(third, start, stack)){
         this.saveMove(third, start, stack);
       }
-      console.log(this.towers);
+      console.log("after moving highest possible priority:", this.towers);
 
         /*
         in a perfect world, that would be my code, but if one of them is sucessful, the others should not be tried
@@ -287,27 +291,7 @@ class tower{
     }
   }
 
-  /**
-   * finds the tower of the specified number if that number is the topDisc
-   *
-   * @param number - The number you are looking for
-   * @returns - The Tower of which the number is the top
-   * @private
-   */
-  private findNumberTower(number: number): number{
-    if(number === this.towers[0][this.findIndexOfTopDisc(0)]){
-      return 0;
-    }
-    else if(number === this.towers[1][this.findIndexOfTopDisc(1)]){
-      return 1;
-    }
-    else if(number === this.towers[2][this.findIndexOfTopDisc(2)]){
-      return 2;
-    }
-    else{
-      throw new Error("findNumberTower: Dude, the number is not on the top, your code does not work")
-    }
-  }
+
 
 
   /**
@@ -325,6 +309,7 @@ class tower{
     }
     if(this.moveIsLegal(fromTower, toTower, stack)){
       this.moveDisc(fromTower, toTower);
+      return;
     }
     console.log("from:", fromTower, "to:", toTower, "with a stack of:", stack, "is not a safe move.")
     return;
@@ -335,27 +320,63 @@ class tower{
    * if this function is in the code, it's still a wip because this is for debugging
    */
   public justHere(): void{
-    towers.buidInitalTowers();
-    console.log(towers)
+    this.buidInitalTowers();
+    console.log(this.towers)
+    console.log(this.sumOfTower(0, 2))
+
   }
 
 
   public run(): void{
-    towers.buidInitalTowers();
-    for(let stack = this.discs; stack > 0; stack--){
-      towers.solve(stack);
+    this.buidInitalTowers();
+    console.log(this.towers)
+    for(let stack = this.discs-1; stack >= 0; stack--){
+      this.solve(stack);
     }
+    console.log("finishd!", this.towers);
   }
+
 
 }
 
 const towers = new tower(3);
+//towers.justHere();
 towers.run();
 
 /*
 A new Bug hunt has begun!!!
-(]]]){ -> This is Herbert.
+
+(]]]){ <- This is Herbert.
 Herbert can not exist. There are a couple of Errors that I wrote which shall never be reached.
 But SOMEHOW the Error "solve: How TF did we get here?!" was thrown.
 I'm happy I wrote this error, I'm displeased that I reached it...
+Solution: The Number of disc is 3 while the biggest index is 0. That could have been obvious
+
+(]]]){ <- This is Artemis
+She brought me another Error that should have been unreachable. "solve: For the love of god, get your prios straight"
+So apparently two of my prios are the same...
+Solution: when the variable maxDiscs is defined within in the for loop, it is 0 with each iteration... Moved it outside
+Furthermore changed < to <= because sometimes 0 is the max Disc
+
+([[[){ <- This is Nimmersatt.
+Nimmersatt is eating my discs. I suspect the move function is faulty.
+Solution: If it is assumed that when the topDisc is discs-1 the topDisc must be 0 and can be overwritten, Nimmersatt
+has no choice but eat them all up!
+
+([[[){ <- This is Nami.
+Nami hates rules and stacks the discs however she likes.
+I mixed up "<" and ">" /again/. No wonder that Nami thinks she is doing everything according to the rules
+
+(]]]){ <- This is Apple-pie
+Apple-pie has a wonderful error for me: "moveIsLegal: fromTower or toTower have an invalid value".
+Another one of those errors that should be not reachable. It's the same Tower.
+I forgot that I coded it that this is something that occurs regularly
+
+(]]]){ <- This is Ms. Friday
+Ms. Friday yearns the weekend and decided that [ [ 0, 0, 1 ], [ 0, 0, 2 ], [ 0, 0, 3 ] ] is solved and exited the code.
+Solution: When I defined stack initally as disc-1, I should also have changed the for loop in run to stack>=0
+
+(]]]){ <- This is Stack
+When I introduced StacK I knew it was going to bite my back. And they did! Little Traitor!!!! At this point I have to rewrite a lot of code...
+
 */
