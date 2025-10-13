@@ -285,30 +285,15 @@ class hanoiGame {
     }
   }
 
-
-
-  /**
-   * if this function is in the code, it's still a wip because this is for debugging
-   */
-  public justHere(): void{
-    this.buidInitalTowers();
-    console.log(this.towers)
-    console.log(this.sumOfTower(0))
-
-  }
-
-
   public run(): void{
     this.buidInitalTowers();
     console.log(this.towers)
     this.solve();
     console.log("finishd!", this.towers);
   }
-
-
 }
 
-const towers = new hanoiGame(5);
+const towers = new hanoiGame(3);
 //towers.justHere();
 towers.run();
 
@@ -371,5 +356,11 @@ So we have three rules:
 As soon as we implement 2nd, we can get rid of the ugly prioritising and everything should work well.
 When these three rules are respected, then there should always just be one valid move left.
 Now it works from 1-4 but not 5 or above
+
+(]]]){ <- This is Ikosaeder
+With 5 discs this friendly bug makes a wrong 21th move, that spirals into chaos.
+I think it's to do with a "Solved" trigger that shows up too late. With 6 there is an error at 64, after 2 are solved
+(but the solved trigger seems to be working). Something is definitely wrong with the solved variable and trigger.
+But that's a problem for future Luna, present Luna is going to go home in a few.
 
 */
