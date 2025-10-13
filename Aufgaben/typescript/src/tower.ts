@@ -122,7 +122,6 @@ class tower{
    * @private
    */
   private solve(): void{
-    let sumOfSolvedDiscs: number = 0;
     let numberofSolvedDiscs: number = 0;
     const end: number = 2;
     let buffer: number;
@@ -142,7 +141,7 @@ class tower{
       }
       //first step is different depending on the stack size
       //move disc one to deignated tower
-      if((this.discs - numberofSolvedDiscs) % 2 === 0){
+      if((this.discs - numberofSolvedDiscs) % 2 === 1){
         this.saveMove(start, end);
       }
       else{
@@ -172,7 +171,7 @@ class tower{
       const topDiscs: number[] = [];
 
       while (this.sumOfTower(start) != 0){
-        topDiscs.push(this.findTopDisc(0);
+        topDiscs.push(this.findTopDisc(0));
         topDiscs.push(this.findTopDisc(1));
         topDiscs.push(this.findTopDisc(2));
         //decide the priorities of the tries
@@ -248,24 +247,27 @@ class tower{
         /*
         in a perfect world, that would be my code, but if one of them is sucessful, the others should not be tried
         //try the first tower
-        this.saveMove(first, end, stack);
-        this.saveMove(first, buffer, stack);
-        this.saveMove(first, start, stack);
+        this.saveMove(first, end);
+        this.saveMove(first, buffer);
+        this.saveMove(first, start);
         //try the second tower
-        this.saveMove(second, end, stack);
-        this.saveMove(second, buffer, stack);
-        this.saveMove(second, start, stack);
+        this.saveMove(second, end);
+        this.saveMove(second, buffer);
+        this.saveMove(second, start);
         //try the third tower
-        this.saveMove(third, end, stack);
-        this.saveMove(third, buffer, stack);
-        this.saveMove(third, start, stack);
+        this.saveMove(third, end);
+        this.saveMove(third, buffer);
+        this.saveMove(third, start);
         */
 
 
       }
 
-      sumOfSolvedDiscs = this.sumOfTower(2);
       numberofSolvedDiscs+=1;
+      console.log("Solved:", numberofSolvedDiscs);
+      if(numberofSolvedDiscs > this.discs){
+        throw new Error("Mate, how did you solved more than there is?");
+      }
 
 
     }
@@ -305,7 +307,7 @@ class tower{
   public justHere(): void{
     this.buidInitalTowers();
     console.log(this.towers)
-    console.log(this.sumOfTower(0, 2))
+    console.log(this.sumOfTower(0))
 
   }
 
@@ -358,9 +360,18 @@ Ms. Friday yearns the weekend and decided that [ [ 0, 0, 1 ], [ 0, 0, 2 ], [ 0, 
 Solution: When I defined stack initally as disc-1, I should also have changed the for loop in run to stack>=0
 
 (]]]){ <- This is Stack
-When I introduced StacK I knew it was going to bite my back. And they did! Little Traitor!!!!
+When I introduced Stack I knew it was going to bite my back. And they did! Little Traitor!!!!
 At this point I have to rewrite a lot of code... The Problem is, that as soon as I go into the second iteration,
 the disc in the most bottom layer are all disregarded and not moveable. This is good for the first disc in their final
 position, but bad for the discs at the other towers...
+
+(]]])[ <- This is Fridolin
+Fridolin does not want the fun to end. So he move the 3 from 0 to 1 and from 1 to 0 in an infinite loop of fun!!
+Solution: Moved disc 1 to the wrong spot, due to a mix up in even and uneven. Changed the Modulo
+
+IT WORKS IT FINALLY WORKS!!!!! (for 3 discs only...)
+
+(]]]){ <- This is Fridolins Sister
+She likes playing, too! And keeps the fun going indefenitly. Because I allowed the program, to move a disc between two positions forever...
 
 */
