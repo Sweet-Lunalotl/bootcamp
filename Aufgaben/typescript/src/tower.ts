@@ -1,5 +1,3 @@
-import { run } from 'node:test';
-
 class tower{
   private towers: number[][] = [[1], [0], [0]];
   private discs: number;
@@ -214,10 +212,15 @@ class tower{
         throw new Error("solve: For the love of god, get your prios straight")
       }
 
+      /*
+      an dieser Stellen sollen dann alle drei Prioritäten auf alle drei tower geprüft werden und das schnellste
+      verschieben soll gemacht werden. Bitte erst prüfen ob es auf die Endposition kann
+      */
+      /*
+      for each priority (highest to lowest) it is checked if the preferred move is legal, the disc is moved and
+      the while loop starts again
+       */
 
-      //an dieser Stellen sollen dann alle drei Prioritäten auf alle drei tower geprüft werden und das schnellste verschieben soll gemacht werden. Bitte erst prüfen ob es auf die Endposition kann
-
-      //for each priority (highest to lowest) it is checked if the preferred move is legal, the disc is moved and the while loop starts again
       //this is gonna get messy, I'm sure I can make it cleaner later
 
       if(this.moveIsLegal(first, end, stack)){
@@ -349,6 +352,10 @@ class tower{
 const towers = new tower(3);
 towers.run();
 
-
-// a new Bug hunt has begun!!!
-// (]]]){ -> This is Herbert. Herbert can not exist. There are a couple of Errors that I wrote which shall never be reached. But SOMEHOW the Error "solve: How TF did we get here?!" was thrown. I'm happy I wrote this error, I'm displeased that I reached it...
+/*
+A new Bug hunt has begun!!!
+(]]]){ -> This is Herbert.
+Herbert can not exist. There are a couple of Errors that I wrote which shall never be reached.
+But SOMEHOW the Error "solve: How TF did we get here?!" was thrown.
+I'm happy I wrote this error, I'm displeased that I reached it...
+*/
