@@ -1,4 +1,4 @@
-class tower{
+class hanoiGame {
   private towers: number[][] = [[1], [0], [0]];
   private discs: number;
 
@@ -34,7 +34,6 @@ class tower{
    *
    * @param fromTower - The tower of which the top disc should be moved. Valid values are 0, 1, 2
    * @param toTower - The tower to which the disc should be moved. Valid values are 0, 1, 2
-   * @param stack - The number of stacks the tower should be solved for
    * @return true - The top disc of fromTower can be moved to ToTower
    * @return false - The top disc of fromTower is bigger than the topDisc of toTower
    * @private
@@ -52,15 +51,12 @@ class tower{
     const topFrom: number = this.findTopDisc(fromTower);
     let topTo: number = this.findTopDisc(toTower);
 
-
     if(fromTower === toTower){
       return false;
     }
-
     if(topFrom === topTo-1){
       return true;
     }
-
     //one could argue that this would belong in a different method called move is smart or something
     if(topTo > topFrom && topFrom % 2 != topTo % 2){
       return true;
@@ -107,8 +103,13 @@ class tower{
     return this.discs-1;
   }
 
-
-
+  /**
+   * Calculates and returns the sum of all discs of a tower
+   *
+   * @param tower - The tower of which the sum of disc numbers should be found. Valid values are 0, 1, 2.
+   * @retruns The value of all disc numbers of a specified tower added.
+   * @private
+   */
   private sumOfTower(tower: number): number{
     let sum: number = 0;
     this.towers[tower].forEach((value: number) => {sum = sum + value});
@@ -116,169 +117,14 @@ class tower{
   }
 
   /**
-   * Solve the problem towers of Hanoi for the specified amount of discs
+   * Find and returns the top disc of specified tower.
    *
-   * @param stack - Amount of disc the problem should be solved for
+   * @param tower - The tower of which the top disc shall be returned
    * @private
    */
-  private solve(): void{
-    let numberofSolvedDiscs: number = 0;
-    const end: number = 2;
-    let buffer: number;
-    let start: number;
-    while(this.sumOfTower(0) + this.sumOfTower(1) != 0){
-      //define which role each tower plays
-      if(this.sumOfTower(0) === 0){
-        buffer = 0;
-        start = 1;
-      }
-      else if(this.sumOfTower(1) === 0){
-        buffer = 1;
-        start = 0;
-      }
-      else{
-        throw new Error("solve: How TF did we get here?!")
-      }
-      //first step is different depending on the stack size
-      //move disc one to deignated tower
-      if((this.discs - numberofSolvedDiscs) % 2 === 1){
-        this.saveMove(start, end);
-      }
-      else{
-        this.saveMove(start, buffer);
-      }
-
-      console.log("after moving 1:", this.towers);
-
-      //alles
-      //stack-1 Scheiben müssen im Buffer gestapelt werden um scheibe = stack von Start zu end zu schieben. Dann vorbei
-
-      //1. Scheibe 1 bewegen (done!!!)
-
-      // 2 bis 4 so lange machen bis sumTower(start) === 0 -> exit
-      //2. gröchste oben liegende Disc verschieben
-      //3. zweit gröchste oben liegende Disc verschieben
-      //4. dritt gröchste oben liegende Disc verschieben
-
-      //verschiebe Regeln:
-      // a: verschiebe auf kleine disc die einen anderen Modulo wert als die zu verschiebende Disk hat
-      // b: verschiebe auf leeren Turm
-      // c: nicht verschieben
-
-      let first: number = 0;
-      let second: number = 0;
-      let third: number = 0;
-      const topDiscs: number[] = [];
-
-      while (this.sumOfTower(start) != 0){
-        topDiscs.push(this.findTopDisc(0));
-        topDiscs.push(this.findTopDisc(1));
-        topDiscs.push(this.findTopDisc(2));
-        //decide the priorities of the tries
-        //there is probably a way to code this cleaner
-        let maxDisc: number = 0;
-        for(let i: number = 0; i < 3; i++){
-          if(topDiscs[i] >= maxDisc){
-            maxDisc = topDiscs[i];
-            first = i;
-          }
-        }
-        maxDisc = 0;
-        for(let i: number = 0; i < 3; i++){
-          if(i != first && topDiscs[i] >= maxDisc){
-            maxDisc = topDiscs[i];
-            second = i;
-          }
-        }
-        maxDisc = 0;
-        for(let i: number = 0; i < 3; i++){
-          if(i != first && i != second && topDiscs[i] >= maxDisc){
-            maxDisc = topDiscs[i];
-            third = i;
-          }
-        }
-        console.log("first:", first);
-        console.log("second:", second);
-        console.log("third:", third);
-        if(first === second || second === third || first === third){
-          throw new Error("solve: For the love of god, get your prios straight")
-        }
-
-        /*
-        an dieser Stellen sollen dann alle drei Prioritäten auf alle drei tower geprüft werden und das schnellste
-        verschieben soll gemacht werden. Bitte erst prüfen ob es auf die Endposition kann
-        */
-        /*
-        for each priority (highest to lowest) it is checked if the preferred move is legal, the disc is moved and
-        the while loop starts again
-         */
-
-        //this is gonna get messy, I'm sure I can make it cleaner later
-
-        if(this.moveIsLegal(first, end)){
-          this.saveMove(first, end);
-        }
-        else if(this.moveIsLegal(first, buffer)){
-          this.saveMove(first, buffer);
-        }
-        else if(this.moveIsLegal(first, start)){
-          this.saveMove(first, start)
-        }
-        else if(this.moveIsLegal(second, end)){
-          this.saveMove(second, end)
-        }
-        else if(this.moveIsLegal(second, buffer)){
-          this.saveMove(second, buffer)
-        }
-        else if(this.moveIsLegal(second, start)){
-          this.saveMove(second, start);
-        }
-        else if(this.moveIsLegal(third, end)){
-          this.saveMove(third, end);
-        }
-        else if(this.moveIsLegal(third, buffer)){
-          this.saveMove(third, buffer);
-        }
-        else if(this.moveIsLegal(third, start)){
-          this.saveMove(third, start);
-        }
-        console.log("after moving highest possible priority:", this.towers);
-
-        /*
-        in a perfect world, that would be my code, but if one of them is sucessful, the others should not be tried
-        //try the first tower
-        this.saveMove(first, end);
-        this.saveMove(first, buffer);
-        this.saveMove(first, start);
-        //try the second tower
-        this.saveMove(second, end);
-        this.saveMove(second, buffer);
-        this.saveMove(second, start);
-        //try the third tower
-        this.saveMove(third, end);
-        this.saveMove(third, buffer);
-        this.saveMove(third, start);
-        */
-
-
-      }
-
-      numberofSolvedDiscs+=1;
-      console.log("Solved:", numberofSolvedDiscs);
-      if(numberofSolvedDiscs > this.discs){
-        throw new Error("Mate, how did you solved more than there is?");
-      }
-
-
-    }
-
-  }
-
   private findTopDisc(tower: number): number{
     return this.towers[tower][this.findIndexOfTopDisc(tower)];
   }
-
-
 
   /**
    * Tries to do a safe move. If it is not a safe move, it will do nothing. If it is a safe Move it will move the disc
@@ -299,6 +145,146 @@ class tower{
     console.log("from:", fromTower, "to:", toTower, "is not a safe move.")
     return;
   }
+
+  /**
+   * finds the tower of the specified number if that number is the topDisc
+   *
+   * @param number - The number you are looking for
+   * @returns - The Tower of which the number is the top
+   * @private
+   */
+  private findNumberTower(number: number): number{
+    if(number === this.towers[0][this.findIndexOfTopDisc(0)]){
+      return 0;
+    }
+    else if(number === this.towers[1][this.findIndexOfTopDisc(1)]){
+      return 1;
+    }
+    else if(number === this.towers[2][this.findIndexOfTopDisc(2)]){
+      return 2;
+    }
+    else{
+      throw new Error("findNumberTower: Dude, the number is not on the top, your code does not work")
+    }
+  }
+
+  /**
+   * Solve the problem towers of Hanoi for the specified amount of discs
+   *
+   * @private
+   */
+  private solve(): void{
+    let numberOfSolvedDiscs: number = 0;
+    const end: number = 2;
+    let buffer: number;
+    let start: number;
+    let moves: number = 0;
+    while(this.sumOfTower(0) + this.sumOfTower(1) != 0){
+      //define which role each tower plays
+      if(this.sumOfTower(0) === 0){
+        buffer = 0;
+        start = 1;
+      }
+      else if(this.sumOfTower(1) === 0){
+        buffer = 1;
+        start = 0;
+      }
+      else{
+        throw new Error("solve: How TF did we get here?!")
+      }
+      //first step is different depending on the stack size
+      //move disc one to designated tower
+      if((this.discs - numberOfSolvedDiscs) % 2 === 1){
+        this.saveMove(start, end);
+      }
+      else{
+        this.saveMove(start, buffer);
+      }
+      moves+=1
+      console.log("move:", moves);
+      console.log("after moving 1:", this.towers);
+
+
+
+
+      const topDiscs: number[] = [];
+      let oneAt: number = -1;
+      let first: number = -1;
+      let second: number = -1;
+
+      while (this.sumOfTower(start) != 0){
+        //maybe in for loop?
+        topDiscs.push(this.findTopDisc(0));
+        topDiscs.push(this.findTopDisc(1));
+        topDiscs.push(this.findTopDisc(2));
+        oneAt = this.findNumberTower(1);
+        //move disc that is not 1
+        let maxDisc: number = 0;
+        for(let i: number = 0; i < 3; i++){
+          if(topDiscs[i] >= maxDisc && topDiscs[i] != 1){
+            maxDisc = topDiscs[i];
+            first = i;
+          }
+        }
+        maxDisc = 0;
+        for(let i: number = 0; i < 3; i++){
+          if(i != first && topDiscs[i] >= maxDisc && topDiscs[i] != 1){
+            maxDisc = topDiscs[i];
+            second = i;
+          }
+        }
+        if(this.moveIsLegal(first, end)){
+          this.saveMove(first, end);
+        }
+        else if(this.moveIsLegal(first, buffer)){
+          this.saveMove(first, buffer);
+        }
+        else if(this.moveIsLegal(first, start)){
+          this.saveMove(first, start)
+        }
+        else if(this.moveIsLegal(second, end)){
+          this.saveMove(second, end)
+        }
+        else if(this.moveIsLegal(second, buffer)){
+          this.saveMove(second, buffer)
+        }
+        else if(this.moveIsLegal(second, start)){
+          this.saveMove(second, start);
+        }
+
+        moves+=1
+        console.log("move:", moves);
+        console.log("after moving other than 1:", this.towers);
+
+        first = -1;
+        second = -1;
+        //clean the array topDiscs
+        topDiscs.length = 0;
+
+        //move disc 1
+        if(this.moveIsLegal(oneAt, end)){
+          this.saveMove(oneAt, end);
+        }
+        else if(this.moveIsLegal(oneAt, buffer)){
+          this.saveMove(oneAt, buffer);
+        }
+        else if(this.moveIsLegal(oneAt, start)){
+          this.saveMove(oneAt, start);
+        }
+
+
+        moves+=1
+        console.log("move:", moves);
+        console.log("after moving 1 again:", this.towers);
+      }
+      numberOfSolvedDiscs+=1;
+      console.log("Solved:", numberOfSolvedDiscs);
+      if(numberOfSolvedDiscs > this.discs){
+        throw new Error("solve: Mate, how did you solved more discs than there are?");
+      }
+    }
+  }
+
 
 
   /**
@@ -322,7 +308,7 @@ class tower{
 
 }
 
-const towers = new tower(3);
+const towers = new hanoiGame(5);
 //towers.justHere();
 towers.run();
 
@@ -357,7 +343,7 @@ I forgot that I coded it that this is something that occurs regularly
 
 (]]]){ <- This is Ms. Friday
 Ms. Friday yearns the weekend and decided that [ [ 0, 0, 1 ], [ 0, 0, 2 ], [ 0, 0, 3 ] ] is solved and exited the code.
-Solution: When I defined stack initally as disc-1, I should also have changed the for loop in run to stack>=0
+Solution: When I defined stack initially as disc-1, I should also have changed the for loop in run to stack>=0
 
 (]]]){ <- This is Stack
 When I introduced Stack I knew it was going to bite my back. And they did! Little Traitor!!!!
@@ -366,12 +352,24 @@ the disc in the most bottom layer are all disregarded and not moveable. This is 
 position, but bad for the discs at the other towers...
 
 (]]])[ <- This is Fridolin
-Fridolin does not want the fun to end. So he move the 3 from 0 to 1 and from 1 to 0 in an infinite loop of fun!!
-Solution: Moved disc 1 to the wrong spot, due to a mix up in even and uneven. Changed the Modulo
+He does not want the fun to end. So he moves the 3 from 0 to 1 and from 1 to 0 in an infinite loop of fun!!
+Solution: Moved disc 1 to the wrong spot, due to a mix-up in even and uneven. Changed the Modulo
 
 IT WORKS IT FINALLY WORKS!!!!! (for 3 discs only...)
 
 (]]]){ <- This is Fridolins Sister
-She likes playing, too! And keeps the fun going indefenitly. Because I allowed the program, to move a disc between two positions forever...
+She likes playing, too! And keeps the fun going indefinitely. Because I allowed the program,
+to move a disc between two positions forever...
+Solution: While I saw some reoccurring patterns in the solution for the Towers on Paper
+(odd numbers only on even numbers, move disc 1 to tower 2 when discs-numberOfSolvedDiscs % 2 == 1),
+I did not notice, thar after a disc that isn't 1 is moved, 1 is always moved next,
+which would prevent the infinity loop I have on my hands.
+So we have three rules:
+1st: Move disc 1 to tower 2 when discs-numberOfSolvedDiscs % 2 == 1
+2nd: After the disc 1 is moved, the next move is always with a disc that isn't 1
+3rf: Odd numbered discs only on even numbered discs
+As soon as we implement 2nd, we can get rid of the ugly prioritising and everything should work well.
+When these three rules are respected, then there should always just be one valid move left.
+Now it works from 1-4 but not 5 or above
 
 */
