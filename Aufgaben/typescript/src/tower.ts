@@ -60,7 +60,7 @@ class tower{
       topTo = 0;
     }
 
-
+    //one could argue that this would belong in a different method called move is smart or something
     if(topTo < topFrom && topFrom % 2 != topTo % 2){
       return true;
     }
@@ -160,6 +160,8 @@ class tower{
       this.saveMove(start, buffer, stack);
     }
 
+    console.log(this.towers);
+
     //alles
     //stack-1 Scheiben müssen im Buffer gestapelt werden um scheibe = stack von Start zu end zu schieben. Dann vorbei
 
@@ -186,6 +188,7 @@ class tower{
       topDiscs.push(this.findTopDiscStack(2, stack));
 
       //decide the priorities of the tries
+      //there is probably a way to code this cleaner
       for(let i: number = 0; i < 3; i++){
         let maxDisc: number = 0;
         if(topDiscs[i] > maxDisc){
@@ -208,10 +211,59 @@ class tower{
         }
       }
       if(first === second || second === third || first === third){
-        throw new Error("For the love of god, get your prios straight")
+        throw new Error("solve: For the love of god, get your prios straight")
       }
 
+
       //an dieser Stellen sollen dann alle drei Prioritäten auf alle drei tower geprüft werden und das schnellste verschieben soll gemacht werden. Bitte erst prüfen ob es auf die Endposition kann
+
+      //for each priority (highest to lowest) it is checked if the preferred move is legal, the disc is moved and the while loop starts again
+      //this is gonna get messy, I'm sure I can make it cleaner later
+
+      if(this.moveIsLegal(first, end, stack)){
+        this.saveMove(first, end, stack);
+      }
+      else if(this.moveIsLegal(first, buffer, stack)){
+        this.saveMove(first, buffer, stack);
+      }
+      else if(this.moveIsLegal(first, start, stack)){
+        this.saveMove(first, start, stack)
+      }
+      else if(this.moveIsLegal(second, end, stack)){
+        this.saveMove(second, end, stack)
+      }
+      else if(this.moveIsLegal(second, buffer, stack)){
+        this.saveMove(second, buffer, stack)
+      }
+      else if(this.moveIsLegal(second, start, stack)){
+        this.saveMove(second, start, stack);
+      }
+      else if(this.moveIsLegal(third, end, stack)){
+        this.saveMove(third, end, stack);
+      }
+      else if(this.moveIsLegal(third, buffer, stack)){
+        this.saveMove(third, buffer, stack);
+      }
+      else if(this.moveIsLegal(third, start, stack)){
+        this.saveMove(third, start, stack);
+      }
+      console.log(this.towers);
+
+        /*
+        in a perfect world, that would be my code, but if one of them is sucessful, the others should not be tried
+        //try the first tower
+        this.saveMove(first, end, stack);
+        this.saveMove(first, buffer, stack);
+        this.saveMove(first, start, stack);
+        //try the second tower
+        this.saveMove(second, end, stack);
+        this.saveMove(second, buffer, stack);
+        this.saveMove(second, start, stack);
+        //try the third tower
+        this.saveMove(third, end, stack);
+        this.saveMove(third, buffer, stack);
+        this.saveMove(third, start, stack);
+        */
 
 
     }
@@ -224,8 +276,8 @@ class tower{
   }
 
   private findTopDiscStack(tower: number, stack: number): number{
-    if(this.findIndexOfTopDisc(0) <= stack){
-      return this.findTopDisc(0);
+    if(this.findIndexOfTopDisc(tower) <= stack){
+      return this.findTopDisc(tower);
     }
     else{
       return 0;
@@ -236,7 +288,7 @@ class tower{
    * finds the tower of the specified number if that number is the topDisc
    *
    * @param number - The number you are looking for
-   * @ returns - The Tower of which the number is the top
+   * @returns - The Tower of which the number is the top
    * @private
    */
   private findNumberTower(number: number): number{
@@ -255,16 +307,24 @@ class tower{
   }
 
 
-
-
-
+  /**
+   * Tries to do a safe move. If it is not a safe move, it will do nothing. If it is a safe Move it will move the disc
+   *
+   * @param fromTower - The tower of which a disc shall be moved
+   * @param toTower - The tower to which the disc shall be moved
+   * @param stack - The amount of Layers for which is checked if the move is legal (yes, I'm playing a dangerous game here hehehehe)
+   * @private
+   */
   private saveMove(fromTower: number, toTower: number, stack: number): void{
+    if(fromTower === toTower){
+      console.log("from:", fromTower, "to:", toTower, "are the same")
+      return;
+    }
     if(this.moveIsLegal(fromTower, toTower, stack)){
       this.moveDisc(fromTower, toTower);
     }
-    else{
-      throw new Error("saveMove: This was not a save move")
-    }
+    console.log("from:", fromTower, "to:", toTower, "with a stack of:", stack, "is not a safe move.")
+    return;
   }
 
 
@@ -287,7 +347,8 @@ class tower{
 }
 
 const towers = new tower(3);
-towers.justHere();
+towers.run();
 
 
-
+// a new Bug hunt has begun!!!
+// (]]]){ -> This is Herbert. Herbert can not exist. There are a couple of Errors that I wrote which shall never be reached. But SOMEHOW the Error "solve: How TF did we get here?!" was thrown. I'm happy I wrote this error, I'm displeased that I reached it...
