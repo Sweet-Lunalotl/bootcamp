@@ -1,6 +1,6 @@
 class hanoiGame {
   private towers: number[][] = [[1], [0], [0]];
-  private discs: number;
+  private readonly discs: number;
 
   /**
    * Creates new Towers
@@ -17,20 +17,21 @@ class hanoiGame {
    * @returns A two Dimensional array filled with n numbers in each dimension
    * @private
    */
-  private buidInitalTowers(): void{
-    for(let itower: number = 0; itower < 3; itower++){
+  private buildInitialTowers(): void{
+    for(let tower: number = 0; tower < 3; tower++){
       for(let discName: number = 2; discName <= this.discs; discName++){
-        if (itower === 0){
-          this.towers[itower].push(discName);
+        if (tower === 0){
+          this.towers[tower].push(discName);
         }
         else{
-          this.towers[itower].push(0);
+          this.towers[tower].push(0);
         }
       }
     }
   }
 
   /**
+   * Checks if move from a tower to a tower is legal and makes sense
    *
    * @param fromTower - The tower of which the top disc should be moved. Valid values are 0, 1, 2
    * @param toTower - The tower to which the disc should be moved. Valid values are 0, 1, 2
@@ -44,7 +45,7 @@ class hanoiGame {
     }
     //check if the tower a disc should be moved from isn't empty
     if(towers.sumOfTower(fromTower) === 0){
-      throw new Error("moveIsLegal: No disc at adressed tower");
+      throw new Error("moveIsLegal: No disc at addressed tower");
     }
     //the top disc of both the to and the from-Tower
     //find to disc of toTower and fromTower
@@ -57,16 +58,10 @@ class hanoiGame {
     if(topFrom === topTo-1){
       return true;
     }
-    //one could argue that this would belong in a different method called move is smart or something
     if(topTo > topFrom && topFrom % 2 != topTo % 2){
       return true;
     }
-    else if(topTo === 0){
-      return true
-    }
-    else{
-      return false;
-    }
+    else return topTo === 0;
   }
 
   /**
@@ -99,7 +94,7 @@ class hanoiGame {
         return discIndex;
       }
     }
-    //Inedx is the lowest index
+    //Index is the lowest index
     return this.discs-1;
   }
 
@@ -192,7 +187,7 @@ class hanoiGame {
       else{
         throw new Error("solve: How TF did we get here?!")
       }
-      //first step is different depending on the stack size
+      //first step is different depending on the number of unsolved discs
       //move disc one to designated tower
       if((this.discs - numberOfSolvedDiscs) % 2 === 1){
         this.saveMove(start, end);
@@ -201,22 +196,17 @@ class hanoiGame {
         this.saveMove(start, buffer);
       }
       moves+=1
-      console.log("move:", moves);
-      console.log("after moving 1:", this.towers);
-
-
-
-
+      this.printState(moves, numberOfSolvedDiscs);
+      //reset variables
       const topDiscs: number[] = [];
       let oneAt: number = -1;
       let first: number = -1;
       let second: number = -1;
 
       while (this.sumOfTower(start) != 0){
-        //maybe in for loop?
-        topDiscs.push(this.findTopDisc(0));
-        topDiscs.push(this.findTopDisc(1));
-        topDiscs.push(this.findTopDisc(2));
+        for(let tower = 0; tower < 3; tower++){
+          topDiscs.push(this.findTopDisc(tower));
+        }
         oneAt = this.findNumberTower(1);
         //move disc that is not 1
         let maxDisc: number = 0;
@@ -251,18 +241,14 @@ class hanoiGame {
         else if(this.moveIsLegal(second, start)){
           this.saveMove(second, start);
         }
-
         moves+=1
-        console.log("move:", moves);
-        console.log("after moving other than 1:", this.towers);
-
+        this.printState(moves, numberOfSolvedDiscs);
+        //clear array and variables
         first = -1;
         second = -1;
-        //clean the array topDiscs
         topDiscs.length = 0;
-
+        //move disc 1
         if(this.sumOfTower(start) != 0){
-          //move disc 1
           if(this.moveIsLegal(oneAt, end)){
             this.saveMove(oneAt, end);
           }
@@ -273,30 +259,38 @@ class hanoiGame {
             this.saveMove(oneAt, start);
           }
           moves+=1
-          console.log("move:", moves);
-          console.log("after moving 1 again:", this.towers);
+          this.printState(moves, numberOfSolvedDiscs);
         }
       }
       numberOfSolvedDiscs+=1;
-      console.log("Solved:", numberOfSolvedDiscs);
+      this.printState(moves, numberOfSolvedDiscs);
       if(numberOfSolvedDiscs > this.discs){
         throw new Error("solve: Mate, how did you solved more discs than there are?");
       }
     }
   }
 
+  private printState(moves: number, solved: number): void{
+    console.log("After move", moves, "there are", solved, "solved discs.");
+    console.log(this.towers[0]);
+    console.log(this.towers[1]);
+    console.log(this.towers[2]);
+    console.log("--------------------")
+  }
+
   /**
-   * 
+   * Runs a tower of hanoi game, that solves itself
    */
   public run(): void{
-    this.buidInitalTowers();
+    this.buildInitialTowers();
     console.log(this.towers)
     this.solve();
-    console.log("finishd!", this.towers);
+    console.log("~~~~~~~~~~~~~~~~~~~~")
+    console.log("Finished!");
   }
 }
 
-const towers = new hanoiGame(17);
+const towers = new hanoiGame(6);
 towers.run();
 
 /*
@@ -309,8 +303,8 @@ I'm happy I wrote this error, I'm displeased that I reached it...
 Solution: The Number of disc is 3 while the biggest index is 0. That could have been obvious
 
 (]]]){ <- This is Artemis
-She brought me another Error that should have been unreachable. "solve: For the love of god, get your prios straight"
-So apparently two of my prios are the same...
+She brought me another Error that should have been unreachable. "solve: For the love of god, get your priorities straight"
+So apparently two of my priorities are the same...
 Solution: when the variable maxDiscs is defined within in the for loop, it is 0 with each iteration... Moved it outside
 Furthermore changed < to <= because sometimes 0 is the max Disc
 
@@ -323,7 +317,7 @@ has no choice but eat them all up!
 Nami hates rules and stacks the discs however she likes.
 I mixed up "<" and ">" /again/. No wonder that Nami thinks she is doing everything according to the rules
 
-(]]]){ <- This is Apple-pie
+(]]]){ <- This is Apple-pie.
 Apple-pie has a wonderful error for me: "moveIsLegal: fromTower or toTower have an invalid value".
 Another one of those errors that should be not reachable. It's the same Tower.
 I forgot that I coded it that this is something that occurs regularly
@@ -360,7 +354,7 @@ When these three rules are respected, then there should always just be one valid
 Now it works from 1-4 but not 5 or above
 
 (]]]){ <- This is Ikosaeder
-With 5 discs this friendly bug makes a wrong 21th move, that spirals into chaos.
+With 5 discs this friendly bug makes a wrong 21st move, that spirals into chaos.
 I think it's to do with a "Solved" trigger that shows up too late. With 6 there is an error at 64, after 2 are solved
 (but the solved trigger seems to be working). Something is definitely wrong with the solved variable and trigger.
 But that's a problem for future Luna, present Luna is going to go home in a few.
@@ -369,7 +363,7 @@ moves are possible within that while loop, the second move was done, despite the
 anymore. So I put the second move in the while loop into an if statement, so that it is skipped, when the condition of
 the while loop is false
 
-(]]]){ <- This is Mimimi. Mimimi is only 6 years old (a minor bug)
+(]]]){ <- This is Annoying. Annoying is only 6 years old (a minor bug)
 Starting at 4, all even numbers for disc are not solved with the lowest possible moves. The odd numbers are always
 solved with n^2-1 moves (tested until n=17)
 
