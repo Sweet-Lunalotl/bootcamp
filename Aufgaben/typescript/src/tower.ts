@@ -261,21 +261,21 @@ class hanoiGame {
         //clean the array topDiscs
         topDiscs.length = 0;
 
-        //move disc 1
-        if(this.moveIsLegal(oneAt, end)){
-          this.saveMove(oneAt, end);
+        if(this.sumOfTower(start) != 0){
+          //move disc 1
+          if(this.moveIsLegal(oneAt, end)){
+            this.saveMove(oneAt, end);
+          }
+          else if(this.moveIsLegal(oneAt, buffer)){
+            this.saveMove(oneAt, buffer);
+          }
+          else if(this.moveIsLegal(oneAt, start)){
+            this.saveMove(oneAt, start);
+          }
+          moves+=1
+          console.log("move:", moves);
+          console.log("after moving 1 again:", this.towers);
         }
-        else if(this.moveIsLegal(oneAt, buffer)){
-          this.saveMove(oneAt, buffer);
-        }
-        else if(this.moveIsLegal(oneAt, start)){
-          this.saveMove(oneAt, start);
-        }
-
-
-        moves+=1
-        console.log("move:", moves);
-        console.log("after moving 1 again:", this.towers);
       }
       numberOfSolvedDiscs+=1;
       console.log("Solved:", numberOfSolvedDiscs);
@@ -285,6 +285,9 @@ class hanoiGame {
     }
   }
 
+  /**
+   * 
+   */
   public run(): void{
     this.buidInitalTowers();
     console.log(this.towers)
@@ -293,8 +296,7 @@ class hanoiGame {
   }
 }
 
-const towers = new hanoiGame(3);
-//towers.justHere();
+const towers = new hanoiGame(17);
 towers.run();
 
 /*
@@ -362,5 +364,13 @@ With 5 discs this friendly bug makes a wrong 21th move, that spirals into chaos.
 I think it's to do with a "Solved" trigger that shows up too late. With 6 there is an error at 64, after 2 are solved
 (but the solved trigger seems to be working). Something is definitely wrong with the solved variable and trigger.
 But that's a problem for future Luna, present Luna is going to go home in a few.
+Solution: Former Future Luna here. This fix was simple. The while loop checks if start tower is empty. But since two
+moves are possible within that while loop, the second move was done, despite the condition of the while loop wasn't true
+anymore. So I put the second move in the while loop into an if statement, so that it is skipped, when the condition of
+the while loop is false
+
+(]]]){ <- This is Mimimi. Mimimi is only 6 years old (a minor bug)
+Starting at 4, all even numbers for disc are not solved with the lowest possible moves. The odd numbers are always
+solved with n^2-1 moves (tested until n=17)
 
 */
