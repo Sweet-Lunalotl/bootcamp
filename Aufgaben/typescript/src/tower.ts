@@ -290,7 +290,7 @@ class hanoiGame {
   }
 }
 
-const towers = new hanoiGame(6);
+const towers = new hanoiGame(14);
 towers.run();
 
 /*
@@ -366,5 +366,9 @@ the while loop is false
 (]]]){ <- This is Annoying. Annoying is only 6 years old (a minor bug)
 Starting at 4, all even numbers for disc are not solved with the lowest possible moves. The odd numbers are always
 solved with n^2-1 moves (tested until n=17)
+Now here is where it gets interesting:
+For n [10,12,14,16]:
+I looked at how many more moves my code makes beyond what would be the lowest possible amount of moves [30, 62, 126, 254].
+The interesting part is, that this number increases by [32, 64, 128]. I'm sure there is some meaning behind it
 
 */
