@@ -112,7 +112,7 @@ class calculation{
   }
 
   private multiply(n1: string, n2: string): string{
-    const result: number = Number(n1) + Number(n2);
+    const result: number = Number(n1) * Number(n2);
     return result.toString();
   }
 
@@ -141,7 +141,7 @@ class calculation{
   private addParenthesis(term: string[]): string[]{
     for(let pos: number = 0; pos < term.length; pos++){
       if(pos === 0){
-        term.splice(pos+1, 0, "(")
+        term.splice(pos, 0, "(")
         pos++;
       }
       if(term[pos] === "+" || term[pos] === "-"){
@@ -153,6 +153,12 @@ class calculation{
     if(term[0] === ")"){
       term.shift();
     }
+    //close the last parenthesis that was opened because of an operator
+    term.push(")");
+    //put the whole term in parenthesis so it can even calculate the last calculation of the term
+    term.push(")");
+    term.unshift("(")
+    console.log(term);
     return term;
   }
 
@@ -163,11 +169,12 @@ class calculation{
    * @private
    */
   private thisIsWhereTheMagicHappens(term: string[]): number{
+    let counter: number = 0;
+    let miniTerm: string[] = [];
     while(term.length > 1){
-      let counter: number = 0;
       let iOfPar1: number = -1;
       let iOfPar2: number = -1;
-      let miniTerm: string[] = [];
+      miniTerm.length = 0;
       //find the current first little term that is in parentheses
       for(let pos: number = 0; pos < term.length; pos++){
         iOfPar1 = term.indexOf("(");
@@ -179,7 +186,7 @@ class calculation{
         }
       }
       //prepare miniTerm to calculate it
-      miniTerm = term.splice(iOfPar1, iOfPar1-iOfPar2+1);
+      miniTerm = term.splice(iOfPar1, iOfPar2+1-iOfPar1);
       miniTerm.pop();
       miniTerm.shift();
       //hand miniTerms off to calculation
@@ -200,16 +207,26 @@ class calculation{
       }
       //in case something went wrong
       counter++;
-      if(counter > term.length || counter > 10000){
+      if(counter > 10000){
         throw new Error("Dude, u alright?");
       }
+      if(miniTerm.length > 1){
+        throw new Error("The miniTerm should only be 1 long at this point")
+      }
+      //put the result of the miniTerm back in the big one
+      term.splice(iOfPar1, 0, miniTerm[0])
+      console.log(term);
+      console.log("mini: ", miniTerm);
     }
+    console.log(term);
     return Number(term[0]);
   }
+
   //end of class
 }
 
-const mew = new calculation("2+3*2");
+const mew = new calculation("2+3*15");
+
 console.log(mew.calculate());
 
 
@@ -218,7 +235,18 @@ console.log(mew.calculate());
 Another code another family of bugs to reunite
 
 (]]]){ <- This is Friday5pm.
-THis little guy makes my code do /nothing/.
+THis little guy makes my code do /nothing/. The addParentheses() function does not work. I even wrote down, that it is
+too complicated...
+So turns out if you want to add something to the first position of the array, you need say it should be at index 0.
+Who would have thunken?! And added a parentheses at the end.
 
+(]]]){ <- This is Wednesday10am.
+Best buddy of Friday5pm. Because the code still does /nothing/. There is an infinity loop somewhere in
+thisIsWhereTheMagicHappens(). Nor it throws me the "Dude, u alright?"-Error. So that's progress.
+Now I know that the miniTerm[] is empty, so nothing is getting calculated. Now miniTerm contains stuff because I
+mixed up iOfPar1 and iOfPar2 in the following: "miniTerm = term.splice(iOfPar1, iOfPar2+1-iOfPar1);"
+I forgot to write the miniTerm back into the big one... Now it's fixed
+
+It works now!!!!
 
  */
