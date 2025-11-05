@@ -12,12 +12,25 @@ a:active{
   color: #c2ffc3;
 }
 
+a:hover{
+  color: #cec2ff;
+}
+
+.contentRowOne{
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
 .card{
+  background-color: #c2ffc3;
   box-shadow: 3px 3px 10px 5px #1D421E;
+  border-radius: 3px;
   width: 55ch;
   display: grid;
   grid-template-columns: [line1] auto [line2] 1fr;
   grid-template-rows: [row1] 2em [row2] 1.5em [row3] 1.5em [row4] auto;
+  row-gap: 0px;
   grid-template-areas:
     "name pic"
     "title pic"
@@ -26,12 +39,16 @@ a:active{
     ;
 }
 
+.card a:active{
+  color: #cec2ff;
+}
+
 .name{
   grid-area: name;
 }
 
 .name h1{
-
+  padding-bottom: 200px;
 }
 
 .pic{
@@ -43,7 +60,7 @@ a:active{
 }
 
 .title h2{
-  padding: 0;
+
 }
 
 .titlelong{
@@ -51,15 +68,12 @@ a:active{
 }
 
 .titlelong h2{
-  padding: 0;
+
 }
 
 .list{
   grid-area: list;
 }
-
-
-
 
 .profilepic{
   height: 5em;
