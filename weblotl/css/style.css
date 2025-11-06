@@ -1,8 +1,8 @@
 body {
   background-color: #cec2ff;
+  font-family: "Dubai", serif;
+  color: #1D421E;
 }
-
-
 
 a:link{
   color: #1D421E;
@@ -11,12 +11,31 @@ a:visited{
   color: #1D421E;
 }
 a:active{
-  color: #c2ffc3;
+  text-underline: #1D421E;
 }
 
 a:hover{
   color: #cec2ff;
 }
+
+
+
+p{
+  color: #1D421E;
+}
+
+.navBar{
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  background-color: #c2ffc3;
+  border-radius: 3px;
+}
+
+.navElement{
+  font-size: 1.2em;
+}
+
 
 .contentRowOne{
   display: flex;
@@ -32,7 +51,7 @@ a:hover{
   display: grid;
   grid-template-columns: [line1] auto [line2] 1fr;
   grid-template-rows: [row1] 2em [row2] 1.5em [row3] 1.5em [row4] auto;
-  row-gap: 0px;
+  row-gap: 0;
   grid-template-areas:
     "name pic"
     "title pic"
@@ -48,10 +67,6 @@ a:hover{
 .name{
   grid-area: name;
   margin-left: 20px;
-}
-
-.card h1{
-  margin-bottom: 200px;
 }
 
 .pic{
@@ -76,7 +91,7 @@ a:hover{
 .list{
   grid-area: list;
   margin-bottom: 10px;
-  margin-top: 17px;
+  margin-top: 25px;
 }
 
 .profilepic{
