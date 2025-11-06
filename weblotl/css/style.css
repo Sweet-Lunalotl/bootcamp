@@ -2,6 +2,8 @@ body {
   background-color: #cec2ff;
 }
 
+
+
 a:link{
   color: #1D421E;
 }
@@ -45,34 +47,36 @@ a:hover{
 
 .name{
   grid-area: name;
+  margin-left: 20px;
 }
 
-.name h1{
-  padding-bottom: 200px;
+.card h1{
+  margin-bottom: 200px;
 }
 
 .pic{
   grid-area: pic;
+  margin-left: 20px;
+  margin-top: 10px;
 }
 
 .title{
   grid-area: title;
-}
-
-.title h2{
-
+  margin-top: 15px;
+  margin-left: 20px;
 }
 
 .titlelong{
   grid-area: titlelong;
+  margin-left: 20px;
+  margin-top: 10px;
 }
 
-.titlelong h2{
-
-}
 
 .list{
   grid-area: list;
+  margin-bottom: 10px;
+  margin-top: 17px;
 }
 
 .profilepic{
