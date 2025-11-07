@@ -1,5 +1,6 @@
 //started with scribbles in my notebook
 
+
 class calculation{
   private readonly inputTerm: string;
 
@@ -11,6 +12,13 @@ class calculation{
     this.inputTerm = term;
   }
 
+  /**
+   * Solves the term by parsing the string that was given to the constructor, adding parenthesis to respect
+   * point before line calculation and finally handing over the term over to thisIsWhereTheMagicHappens()
+   * where it gets calculated.
+   *
+   * @returns Number that is the solution of the term
+   */
   public calculate(): number{
     let solution = 0;
     let term: string[] = this.parse()
@@ -125,7 +133,7 @@ class calculation{
     const nn1: number = Number(n1);
     const nn2: number = Number(n2);
     let result: number = nn1;
-    for(let i = 0; i < nn2; i++){
+    for(let i = 1; i < nn2; i++){
       result*=nn1;
     }
     return result.toString();
@@ -134,6 +142,7 @@ class calculation{
   /**
    * To respect point before line calculation this method encapsulates all the summands of the given term in
    * parenthesise by adding ")" before +/- and "(" after +/-.
+   *
    * @param term - mathematical term.
    * @returns mathematical term with parenthesise
    * @private
@@ -221,12 +230,13 @@ class calculation{
     console.log(term);
     return Number(term[0]);
   }
-
   //end of class
 }
 
-const mew = new calculation("2+3*15");
-
+//creates new calculation
+const mew = new calculation("3+2*(5+1)-2^5");
+//solves the term and prints the solution
+//3+2*(5+1)-2^5=-17
 console.log(mew.calculate());
 
 
