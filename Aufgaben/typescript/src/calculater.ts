@@ -1,5 +1,6 @@
-//started with scribbles in my notebook
-
+//TODO: line 203 and following could be written in a method
+//TODO: 2*2*2 throws Error pls fix
+//TODO: zu dem Switch, ginge da nicht so etwas if ("0123456789.+-*/^".includes(char)) { Oder sonst eine Liste mit includes?
 
 class calculation{
   private readonly inputTerm: string;
@@ -231,11 +232,10 @@ class calculation{
     console.log(term);
     return Number(term[0]);
   }
-  //end of class
 }
 
 //creates new calculation
-const mew = new calculation("3+2*(5+1)-2^5");
+const mew = new calculation("2*2*2");
 //solves the term and prints the solution
 //3+2*(5+1)-2^5=-17
 console.log(mew.calculate());
