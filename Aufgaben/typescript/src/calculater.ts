@@ -21,7 +21,7 @@ class calculation{
    */
   public calculate(): number{
     let solution = 0;
-    let term: string[] = this.parse()
+    let term: string[] = this.parse();
     term = this.addParenthesis(term);
     solution = this.thisIsWhereTheMagicHappens(term);
     return solution;
@@ -150,12 +150,12 @@ class calculation{
   private addParenthesis(term: string[]): string[]{
     for(let pos: number = 0; pos < term.length; pos++){
       if(pos === 0){
-        term.splice(pos, 0, "(")
+        term.splice(pos, 0, "(");
         pos++;
       }
       if(term[pos] === "+" || term[pos] === "-"){
-        term.splice(pos, 0, ")")
-        term.splice(pos+2, 0, "(")
+        term.splice(pos, 0, ")");
+        term.splice(pos+2, 0, "(");
         pos+=2;
       }
     }
@@ -199,6 +199,7 @@ class calculation{
       miniTerm.pop();
       miniTerm.shift();
       //hand miniTerms off to calculation
+      //I know I could put this in it's own method, but no time
       if(miniTerm.includes("^")){
         miniTerm.splice(miniTerm.indexOf("^")-1, 3, this.power(miniTerm[miniTerm.indexOf("^")-1], miniTerm[miniTerm.indexOf("^")+1]));
       }
@@ -220,10 +221,10 @@ class calculation{
         throw new Error("Dude, u alright?");
       }
       if(miniTerm.length > 1){
-        throw new Error("The miniTerm should only be 1 long at this point")
+        throw new Error("The miniTerm should only be 1 long at this point");
       }
       //put the result of the miniTerm back in the big one
-      term.splice(iOfPar1, 0, miniTerm[0])
+      term.splice(iOfPar1, 0, miniTerm[0]);
       console.log(term);
       console.log("mini: ", miniTerm);
     }
