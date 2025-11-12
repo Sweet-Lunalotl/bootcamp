@@ -290,7 +290,7 @@ class hanoiGame {
   }
 }
 
-const towers = new hanoiGame(14);
+const towers = new hanoiGame(6);
 towers.run();
 
 /*

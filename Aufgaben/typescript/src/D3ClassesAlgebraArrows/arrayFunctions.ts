@@ -35,4 +35,3 @@ console.log(cars);
 //Aufgabe 3: new array audis with all cars from the brand Audi
 const audis: Cars[]= cars.filter((brand: Cars) => brand.brand === "Audi");
 console.log(audis);
-
