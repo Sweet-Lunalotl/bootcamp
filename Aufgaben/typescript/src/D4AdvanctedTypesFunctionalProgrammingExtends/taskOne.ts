@@ -11,7 +11,9 @@ const exampleTwo: nonEmpty<Number> = [1, 2];
 //const  exampleFour: nonEmpty<Number> = [];
 
 //task 1b
-//What should the array be filled with?! Or should it just accept non empty arrays? I think the second one must be right
-//What even is an object type containing arrays? For Example an interface containing multiple arrays as their parameters
-//but it should not be an interface it should be a type AHHHHHH
-//and how should I change something without actually calling a function?
+
+//What I think the task wants:
+// Create a type that that only accepts non empty arrays- (like in 1a)
+//But now it should work for multiple arrays that are part of an object (like an Interface)
+//So I have a interface with arrays as parameters, that may be empty
+//Then I write that interface into a generic Interfase that just accepts non empty types
