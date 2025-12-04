@@ -1,6 +1,14 @@
 
 function TikTakToe(){
-    return
+    return(
+        <>
+
+        </>
+    )
 }
 
-export default TikTakToe
+function Square() {
+    return <button className="square">X</button>;
+}
+
+export default Square
