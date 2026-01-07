@@ -6,6 +6,7 @@ function getRandomInt(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+//versucht die Position der Nummer 1 zu finden
 function lasVegas(array: number[]): number {
   for (let i: number = 1; i < 1000; i++) {
     const r: number = getRandomInt(0, array.length - 1);
