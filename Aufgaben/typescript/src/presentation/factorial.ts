@@ -18,7 +18,7 @@ function recursiveFactorial(n: number): number{
 }
 
 //returns 120
-console.log(recursiveFactorial(9636));
+console.log(recursiveFactorial(5));
 
 //returns 120
 //console.log(iterativeFactorial(5));
