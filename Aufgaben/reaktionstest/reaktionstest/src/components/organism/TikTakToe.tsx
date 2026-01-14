@@ -1,13 +1,7 @@
 import {useState} from "react";
 
 
-function TikTakToe(){
-    return(
-        <>
 
-        </>
-    )
-}
 
 function Square({value, onSquareClick}: {value: string, onSquareClick: any}){
 
@@ -88,7 +82,7 @@ function calculateWinner(squares: string[]): string | null {
     return null;
 }
 
-function Game() {
+function TikTakToe() {
     return (
         <div className="game">
             <div className="game-board">
@@ -101,4 +95,4 @@ function Game() {
     );
 }
 
-export default Game
+export default TikTakToe

@@ -1,10 +1,9 @@
-
 .board-row {
     display: flex;
 }
 
 .square {
-    border-color: black;
+    border-color: #1D421E;
     border-radius: 0;
     border-width: 2px;
     width: 2em;
@@ -16,4 +15,14 @@
     font-size: 2em;
 }
 
+.nameTest{
+    background-color: #c2ffc3;
+    display: flex;
+    justify-content: center;
+}
 
+.tikTak{
+    background-color: #c2f5c3;
+    display: flex;
+    justify-content: center;
+}

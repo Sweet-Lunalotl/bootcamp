@@ -1,5 +1,5 @@
 import './App.css'
-import TestTextBox from "./components/atoms/TestTextBox.tsx";
+import TestHelloMessage from "./components/molecules/TestHelloMessage.tsx";
 import Board from "./components/organism/TikTakToe.tsx";
 
 function App() {
@@ -7,8 +7,12 @@ function App() {
 
   return (
       <>
-          <TestTextBox></TestTextBox>
+          <div className="nameTest">
+          <TestHelloMessage></TestHelloMessage>
+          </div>
+          <div className="tikTak">
           <Board></Board>
+          </div>
       </>
   )
 }

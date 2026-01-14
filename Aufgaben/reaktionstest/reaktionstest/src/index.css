@@ -1,0 +1,54 @@
+body {
+    background-color: #cec2ff;
+    font-family: "Dubai", serif;
+    color: #1D421E;
+    margin: 0;
+}
+
+a:link{
+    color: #1D421E;
+}
+a:visited{
+    color: #1D421E;
+}
+a:active{
+    text-underline: #1D421E;
+}
+
+a:hover{
+    color: #cec2ff;
+}
+
+input{
+    background-color: #cec2ff;
+}
+
+button{
+    background-color: #cec2ff;
+}
+
+p{
+    color: #1D421E;
+}
+
+/*
+
+.bodyclass{
+    border-width: 2px;
+    border-color: black;
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.workingclass{
+    border-width: 2px;
+    border-color: black;
+    display: flex;
+    justify-content: center;
+    width: 150ch;
+    padding: 20px
+}
+
+
+ */
