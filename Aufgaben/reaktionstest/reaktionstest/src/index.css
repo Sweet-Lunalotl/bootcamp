@@ -19,8 +19,18 @@ a:hover{
     color: #cec2ff;
 }
 
-input{
+input[type=text]{
     background-color: #cec2ff;
+    border-style: solid;
+    border-color: #1D421E;
+    padding: 10px;
+}
+/* Warum funktioniert das nicht :< */
+input[type=text]:focus{
+    border-style: solid;
+    border-radius: 0px;
+    border-color: #1D421E;
+
 }
 
 button{

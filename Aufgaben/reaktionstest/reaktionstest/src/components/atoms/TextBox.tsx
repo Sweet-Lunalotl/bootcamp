@@ -7,7 +7,7 @@ interface TextBoxProperties {
 
 function TextBox({setCurrentText, placeHolder}: TextBoxProperties) {
     return <>
-        <input
+        <input type="text"
             placeholder={placeHolder}
             onChange={(e) => setCurrentText(e.target.value)}
         />
