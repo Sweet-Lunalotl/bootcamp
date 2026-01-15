@@ -23,7 +23,26 @@
 }
 
 .tikTak{
-    background-color: #c2f5c3;
+    background-color: #BBFaBC;
     display: flex;
     justify-content: center;
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
+
+.taskList{
+    background-color: #c2ffc3;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1em;
+}
+
+.taskList button{
+    padding: 10px;
+    margin-left: 20px;
+}
+
+.listarea{
+    background-color: #cec2ff;
+    padding-left: 2em;
 }

@@ -1,6 +1,7 @@
 import './App.css'
 import TestHelloMessage from "./components/molecules/TestHelloMessage.tsx";
-import Board from "./components/organism/TikTakToe.tsx";
+import TikTakToe from "./components/organism/TikTakToe.tsx";
+import TaskList from "./components/organism/TaskList.tsx";
 
 function App() {
 
@@ -8,10 +9,13 @@ function App() {
   return (
       <>
           <div className="nameTest">
-          <TestHelloMessage></TestHelloMessage>
+            <TestHelloMessage></TestHelloMessage>
           </div>
           <div className="tikTak">
-          <Board></Board>
+            <TikTakToe></TikTakToe>
+          </div>
+          <div className="taskList">
+            <TaskList></TaskList>
           </div>
       </>
   )

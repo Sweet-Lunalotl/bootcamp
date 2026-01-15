@@ -1,10 +1,6 @@
 import {useState} from "react";
 
-
-
-
 function Square({value, onSquareClick}: {value: string, onSquareClick: any}){
-
     return (
         <>
             <button className="square" onClick={onSquareClick}>{value}</button>

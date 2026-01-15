@@ -30,11 +30,16 @@ input[type=text]:focus{
     border-style: solid;
     border-radius: 0px;
     border-color: #1D421E;
+    background-color: #E2D6FF;
 
 }
 
 button{
     background-color: #cec2ff;
+}
+
+button:active{
+    background-color: #E2D6FF;
 }
 
 p{
