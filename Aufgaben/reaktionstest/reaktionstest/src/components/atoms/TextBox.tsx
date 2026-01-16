@@ -8,10 +8,10 @@ interface TextBoxProperties {
 function TextBox({setCurrentText, currentText, placeHolder, maxLength}: TextBoxProperties) {
     return <>
         <input type="text"
-            placeholder={placeHolder}
-            maxLength={maxLength}
+               placeholder={placeHolder}
+               maxLength={maxLength}
                value={currentText}
-            onChange={(e) => setCurrentText(e.target.value)}
+               onChange={(e) => setCurrentText(e.target.value)}
         />
     </>
 }
