@@ -44,5 +44,7 @@
 
 .listarea{
     background-color: #cec2ff;
-    padding-left: 2em;
+    list-style-position: inside;
+    padding-left: 10px;
 }
+
