@@ -1,0 +1,75 @@
+:root{
+    --color-accent: #cec2ff;
+    --color-accent-bright: #E2D6FF;
+    --color-prime: #c2ffc3;
+    --color-prime2: #bbfabc;
+    --color-text: #1d421e;
+    --square-size: 6rem;
+
+}
+
+body {
+    background-color: var(--color-accent);
+    font-family: "Dubai", serif;
+    color: var(--color-text);
+    margin: 0;
+
+}
+
+a:link{
+    color: var(--color-text);
+}
+a:visited{
+    color: var(--color-text);
+}
+a:active{
+    text-underline: var(--color-text);
+}
+
+a:hover{
+    color: var(--color-accent);
+}
+
+button{
+    background-color: var(--color-accent);
+}
+
+button:active{
+    background-color: var(--color-accent-bright);
+}
+
+button:hover{
+    border-color: var(--color-prime);
+    border-width: 4px;
+}
+
+p{
+    color: var(--color-text);
+}
+
+.board-row {
+    display: flex;
+}
+
+.square {
+    border-color: var(--color-text);
+    border-radius: 0;
+    border-width: 2px;
+    border-style: solid;
+    width: var(--square-size);
+    height: var(--square-size);
+    font-size: 2rem;
+}
+
+.board-offset{
+    margin-left: calc(var(--square-size)/2);
+}
+
+.tikTak{
+    background-color: var(--color-prime2);
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+

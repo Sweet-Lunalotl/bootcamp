@@ -30,12 +30,12 @@ function SubmitTask({maxLength = 100}){
         <>
             <div className="listarea">
             {list.map(item => {
-                return <li onClick={AddButtonClicked} key={item}>{item}</li>
+                return <li onClick={ToDoClicked} key={item}>{item}</li>
             })}
             </div>
             <h2>Add new To-Do</h2>
             <TextBox setCurrentText={setText} currentText={text} placeHolder="What you gonna do now?" maxLength={maxLength}></TextBox>
-            <MyButton title="add" onClick={ToDoClicked}></MyButton>
+            <MyButton title="add" onClick={AddButtonClicked}></MyButton>
         </>
     )
 }

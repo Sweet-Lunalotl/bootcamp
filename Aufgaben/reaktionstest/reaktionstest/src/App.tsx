@@ -9,14 +9,15 @@ function App() {
   return (
       <>
           <div className="nameTest">
-            <TestHelloMessage></TestHelloMessage>
+              <TestHelloMessage></TestHelloMessage>
           </div>
           <div className="tikTak">
-            <TikTakToe></TikTakToe>
+              <TikTakToe></TikTakToe>
           </div>
           <div className="taskList">
-            <TaskList></TaskList>
+              <TaskList></TaskList>
           </div>
+
       </>
   )
 }
