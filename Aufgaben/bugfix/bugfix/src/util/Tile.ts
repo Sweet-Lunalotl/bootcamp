@@ -15,6 +15,10 @@ export abstract class Tile{
     //Blue: sloppy
     //Pink: scope creep / lost
 
+    /**
+     * Gives you the needs of any given tile as an Array with 4 elements
+     * @returns Array - Array with 4 elements
+     */
     public getNeeds(): number[]{
         const needs: number[] = [];
         needs.push(this.needsOrange);
@@ -24,6 +28,10 @@ export abstract class Tile{
         return needs;
     }
 
+    /**
+     * Gives you what attributes a tile of any given tile has as an Array with 4 elements
+     * @returns Array - Array with 4 elements
+     */
     public getHas(): number[]{
         const has: number[] = [];
         has.push(this.isOrange);

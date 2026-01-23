@@ -7,7 +7,11 @@ export class DrawPile{
     private percentageBugs: number;
     private pile: Tile[];
 
-    //two bugs per
+    /**
+     * Constructor of the class DrawPile
+     * @param cardsAmount - Numbers of cards that should be in the DrawPile
+     * @param percentageBugs - Percentage of Bug Tiles in the DrawPile. As decimal number
+     */
     constructor(cardsAmount: number, percentageBugs: number) {
         this.cardsAmount = cardsAmount;
         this.percentageBugs = percentageBugs;
@@ -20,6 +24,9 @@ export class DrawPile{
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    /**
+     * Fills the DrawPile with Tiles
+     */
     public fillDrawPile(){
         const bugAmount: number = Math.round(this.cardsAmount * this.percentageBugs);
         const foodAmount: number = this.cardsAmount - (bugAmount+1);

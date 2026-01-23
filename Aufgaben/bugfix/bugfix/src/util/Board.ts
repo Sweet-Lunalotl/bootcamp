@@ -1,5 +1,6 @@
 import {Tile} from './Tile.ts'
 
+
 export class Board{
     private width: number;
     private heigth: number;
@@ -76,8 +77,5 @@ export class Board{
         }
         return this.getAdjacent(x, y).length > 0;
     }
-
-
-
 
 }
