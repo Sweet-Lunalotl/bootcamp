@@ -36,6 +36,12 @@ export class Board{
         this.board[y][x] = value;
     }
 
+    /**
+     *
+     * @param x - x of the field
+     * @param y - y of the field
+     * @returns Array - filled with the Objects of the neightboring fields
+     */
     public getAdjacent(x: number, y: number){
         const adjacent = [];
         //Matrix to find all neighbours of given field     x   y    x    y   x   y    x  y
@@ -55,6 +61,12 @@ export class Board{
         return adjacent;
     }
 
+    /**
+     * Can a Tile can be placed on this position?
+     * @param x - x of the desired position
+     * @param y - y of the desired position
+     * @returns Boolean - true: Placement is legal. false: placement is not legal
+     */
     public legalPlacement(x: number, y: number): boolean{
         if(y >= this.heigth || x >= this.width || x < 0 || y < 0){
             return false;
