@@ -23,4 +23,6 @@ export class TileBug extends Tile{
         this.isPink = 0;
         this.isLevel = isLevel;
     }
+
+
 }

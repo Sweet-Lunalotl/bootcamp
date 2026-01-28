@@ -15,6 +15,8 @@ export abstract class Tile{
     //Blue: sloppy
     //Pink: scope creep / lost
 
+    //abstract setFufilled(): void;
+
     /**
      * Gives you the needs of any given tile as an Array with 4 elements
      * @returns Array - Array with 4 elements
@@ -45,6 +47,35 @@ export abstract class Tile{
         }
         return has;
     }
+
+    public getHasLvl(): boolean{
+        return this.isLevel > 0;
+    }
+
+    /**
+     * Sets if a bug has all it's needs fufilled and whos it was fufilled by.
+     * @param fufilledBy - Can be -1 for noone, 1 for playerOne and 2 for playerTwo.
+     * @param fufilled - Boolean that stores if the needs of a bug are fufilled.
+     */
+    public setFufilled(fufilledBy: number, fufilled: boolean): void{
+        if(!this.getHasLvl()){
+            throw new Error("cannot setFufilled() for food")
+        }
+        if(!(fufilledBy >= -1 || fufilledBy >= 2)){
+            throw new Error("Invalid number for fufilledBy")
+        }
+        this.fufilled = fufilled;
+        this.fufilledBy = fufilledBy;
+    }
+
+    public getIsFufilled(): boolean{
+        return this.fufilled
+    }
+
+    public getFufilledBy(): number{
+        return this.fufilledBy;
+    }
+
 
 }
 
