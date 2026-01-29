@@ -3,10 +3,10 @@ import {TileFood} from './TileFood.ts'
 import {TileBug} from './TileBug.ts'
 
 export class DrawPile {
-    private cardsAmount: number;
-    private percentageBugs: number;
-    private sortedPile: Tile[];
-    private shuffledPile: Tile[];
+    private readonly cardsAmount: number;
+    private readonly percentageBugs: number;
+    private readonly sortedPile: Tile[];
+    private readonly shuffledPile: Tile[];
 
     /**
      * Constructor of the class DrawPile
@@ -120,6 +120,9 @@ export class DrawPile {
         }
     }
 
+    /**
+     * Shuffel the drawPile into a random Order
+     */
     public shuffelDrawPile(): void {
         //shallow copy because only the order of the objects matter. if the obj change states is not important
         const temp: Tile[] = this.sortedPile.slice();
@@ -129,25 +132,6 @@ export class DrawPile {
             this.shuffledPile.push(temp[randomInt]);
             temp.splice(randomInt, 1);
         }
-    }
-
-    /**
-     * Get all the tiles that are part of the game. Useful to give the player an overview of what tiles they can draw
-     * @returns Array - Filled with all the tiles that are part of the game
-     */
-    public getSortedDrawPile(): Tile[] {
-        return this.sortedPile;
-    }
-
-    /**
-     * Get the shuffled draw pile.
-     * @returns Array - Filled with tiles that are part of the game in random order.
-     */
-    public getShuffledDrawPile(): Tile[] {
-        if(this.shuffledPile.length < 1){
-            throw new Error("Unable to return empty Array")
-        }
-        return this.shuffledPile;
     }
 
     /**
@@ -161,9 +145,33 @@ export class DrawPile {
         return this.shuffledPile.splice(0, amount);
     }
 
+    /**
+     * Returns if the drawPile is empty. True: the drawPile is empty; False: the drawPile has at least one tile left
+     * @returns boolean
+     */
     public isEmpty(): boolean{
         return this.shuffledPile.length > 0;
     }
+
+    /*
+     * Get all the tiles that are part of the game. Useful to give the player an overview of what tiles they can draw
+     * @returns Array - Filled with all the tiles that are part of the game
+     *
+    public getSortedDrawPile(): Tile[] {
+        return this.sortedPile;
+    }
+*/
+    /*
+     * Get the shuffled draw pile.
+     * @returns Array - Filled with tiles that are part of the game in random order.
+     *
+    public getShuffledDrawPile(): Tile[] {
+        if(this.shuffledPile.length < 1){
+            throw new Error("Unable to return empty Array")
+        }
+        return this.shuffledPile;
+    }
+    */
 }
 
 

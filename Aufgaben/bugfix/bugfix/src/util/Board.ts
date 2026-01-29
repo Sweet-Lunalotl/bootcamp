@@ -1,11 +1,9 @@
 import {Tile} from './Tile.ts'
-import {TileBug} from "./TileBug.ts";
-
 
 export class Board{
-    private width: number;
-    private heigth: number;
-    private board: Tile[][];
+    private readonly width: number;
+    private readonly height: number;
+    private readonly board: Tile[][];
     private scorePlayerOne: number = 0;
     private scorePlayerTwo: number = 0;
 
@@ -16,48 +14,74 @@ export class Board{
      */
     constructor(width: number, height: number) {
         this.width = width;
-        this.heigth = height;
+        this.height = height;
         this.board = Array.from({ length: height }, () => Array(width).fill(null));
     }
 
+    /**
+     * Get width (x) of the board. Starts counting at 1.
+     * @returns number
+     */
     public getWidth(): number{
         return this.width;
     }
 
-    public getHeigth(): number{
-        return this.heigth;
-    }
-
-    public getBoard(){
-        return this.board;
-    }
-
-    public getField(x: number, y: number){
-        return this.board[y][x];
-    }
-
-    public setField(x: number, y: number, tile: Tile){
-        this.board[y][x] = tile;
+    /**
+     * Get height (y) of the board. Starts counting at 1.
+     * @returns number
+     */
+    public getHeight(): number{
+        return this.height;
     }
 
     /**
-     *
+     * Returns tile at specified position of the board. (0, 0) is in the upper left corner.
+     * @param x - X coordinate. Min: 0 (most left); Max: getWidth-1 (most right)
+     * @param y - Y coordinate. Min: 0 (top); Max: getHeight-1 (bottom)
+     * @returns Tile
+     */
+    public getField(x: number, y: number): Tile{
+        if(x < this.width && y < this.height && x >= 0 && y >= 0){
+            return this.board[y][x];
+        }
+        else{
+            throw new Error("Out of bounds")
+        }
+    }
+
+    /**
+     * Fill a specific field with a tile.
+     * @param x - X coordinate
+     * @param y - y coordinate
+     * @param tile - Tile Object
+     */
+    public setField(x: number, y: number, tile: Tile): void{
+        if(x < this.width && y < this.height && x >= 0 && y >= 0){
+            this.board[y][x] = tile;
+        }
+        else{
+            throw new Error("Out of bounds")
+        }
+    }
+
+    /**
+     * Returns an Array with all the neighboring Tiles
      * @param x - x of the field
      * @param y - y of the field
-     * @returns Array - filled with the Objects of the neightboring fields
+     * @returns Tile[]
      */
-    private getAdjacent(x: number, y: number){
+    private getAdjacent(x: number, y: number): Tile[]{
         const adjacent = [];
         //Matrix to find all neighbours of given field     x   y    x    y   x   y    x  y
         const neighbours: number[][]= [[-1, -1], [0, -1], [-1, 0], [1, 0], [-1, 1], [0, 1]]
         //field is in board
-        if(y >= this.heigth || x >= this.width || x < 0 || y < 0){
+        if(y >= this.height || x >= this.width || x < 0 || y < 0){
             throw new Error("Out of Bounds")
         }
         //pushes all fields != null, which are in board into neighbours
         for(let i=0; i<adjacent.length; i++){
                if(x + neighbours[i][0] < this.width && x + neighbours[i][0] < 0 &&
-                   y + neighbours[i][1] < this.heigth && y + neighbours[i][1] > 0 &&
+                   y + neighbours[i][1] < this.height && y + neighbours[i][1] > 0 &&
                    this.board[y+neighbours[i][1]][x+neighbours[i][0]] != null){
                         adjacent.push(this.board[y+neighbours[i][1]][x+neighbours[i][0]])
                }
@@ -72,7 +96,7 @@ export class Board{
      * @returns Boolean - true: Placement is legal. false: placement is not legal
      */
     public legalPlacement(x: number, y: number): boolean{
-        if(y >= this.heigth || x >= this.width || x < 0 || y < 0){
+        if(y >= this.height || x >= this.width || x < 0 || y < 0){
             return false;
         }
         if(this.getField(x, y) != null){
@@ -94,7 +118,7 @@ export class Board{
         let scoreTempOne: number = 0
         let scoreTempTwo: number = 0
         //durch alle Felder durchgehen
-        for(let y: number = 0; y < this.heigth; y++){
+        for(let y: number = 0; y < this.height; y++){
             for(let x: number = 0; x < this.width; x++){
                 //board[y][x]
                 //                              only bugs have a lvl and can score points
@@ -109,20 +133,20 @@ export class Board{
                         }
                     }
                     if(addedHas[0] >= needs[0] && addedHas[1] >= needs[1] && addedHas[2] >= needs[2] && addedHas[3] >= needs[3]){
-                        this.board[y][x].setFufilled(activePlayer, true);
+                        this.board[y][x].setFulfilled(activePlayer, true);
                     }
                     else {
-                        this.board[y][x].setFufilled(-1, false);
+                        this.board[y][x].setFulfilled(-1, false);
                     }
-                    if(this.board[y][x].getIsFufilled()){
-                        if(this.board[y][x].getFufilledBy() === 1){
-                            scoreTempOne += 1;
+                    if(this.board[y][x].getIsFulfilled()){
+                        if(this.board[y][x].getFulfilledBy() === 1){
+                            scoreTempOne += this.board[y][x].getLvl();
                         }
                         else if(this.board[y][x]){
-                            scoreTempTwo += 1
+                            scoreTempTwo += this.board[y][x].getLvl();
                         }
                         else {
-                            throw new Error("A bug is fufilled but noone has fufilled it? this must be a bug")
+                            throw new Error("A bug is fulfilled but no-one has fulfilled it? this must be a bug")
                         }
                     }
                 }
@@ -130,6 +154,22 @@ export class Board{
         }
         this.scorePlayerOne = scoreTempOne;
         this.scorePlayerTwo = scoreTempTwo;
+    }
+
+    /**
+     * Get the score of playerOne
+     * @returns number
+     */
+    public getScorePlayerOne(): number{
+        return this.scorePlayerOne;
+    }
+
+    /**
+     * Get the score of playerTwo
+     * @returns number
+     */
+    public getScorePlayerTwo(): number{
+        return this.scorePlayerTwo;
     }
 
 }

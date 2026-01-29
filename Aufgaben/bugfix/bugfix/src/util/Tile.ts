@@ -1,21 +1,19 @@
 export abstract class Tile{
-    protected name: string;
-    protected needsOrange: number;
-    protected needsBlue: number;
-    protected needsPink: number;
-    protected needsLevel: number;
-    protected isOrange: number;
-    protected isBlue: number;
-    protected isPink: number;
-    protected isLevel: number;
-    protected fufilled: boolean = false;
-    protected fufilledBy: number = -1;
+    protected name: string = "0";
+    protected needsOrange: number = 0;
+    protected needsBlue: number = 0;
+    protected needsPink: number = 0;
+    protected needsLevel: number = 0;
+    protected isOrange: number = 0;
+    protected isBlue: number = 0;
+    protected isPink: number = 0;
+    protected isLevel: number = 0;
+    protected fulfilled: boolean = false;
+    protected fulfilledBy: number = -1;
 
     //Orange: stress
     //Blue: sloppy
     //Pink: scope creep / lost
-
-    //abstract setFufilled(): void;
 
     /**
      * Gives you the needs of any given tile as an Array with 4 elements
@@ -39,7 +37,7 @@ export abstract class Tile{
         has.push(this.isOrange);
         has.push(this.isBlue);
         has.push(this.isPink);
-        if(this.fufilled){
+        if(this.fulfilled){
             has.push(this.isLevel);
         }
         else {
@@ -48,41 +46,59 @@ export abstract class Tile{
         return has;
     }
 
+    /**
+     * Returns if a tile has a level. If it is true, the tile is a bug; if it is false, the tile is food.
+     * @returns boolean
+     */
     public getHasLvl(): boolean{
         return this.isLevel > 0;
     }
 
     /**
-     * Sets if a bug has all it's needs fufilled and whos it was fufilled by.
-     * @param fufilledBy - Can be -1 for noone, 1 for playerOne and 2 for playerTwo.
-     * @param fufilled - Boolean that stores if the needs of a bug are fufilled.
+     * Returns the level of a tile. Used for figuring out how many point a tile is worth.
+     * @returns number
      */
-    public setFufilled(fufilledBy: number, fufilled: boolean): void{
+    public getLvl(): number{
+        return this.isLevel;
+    }
+
+    /**
+     * Sets if a bug has all it's needs fulfilled and who it was fulfilled by.
+     * @param fulfilledBy - Can be -1 for no-one, 1 for playerOne and 2 for playerTwo.
+     * @param fulfilled - Boolean that stores if the needs of a bug are fulfilled.
+     */
+    public setFulfilled(fulfilledBy: number, fulfilled: boolean): void{
         if(!this.getHasLvl()){
-            throw new Error("cannot setFufilled() for food")
+            throw new Error("cannot setFulfilled() for food")
         }
-        if(!(fufilledBy >= -1 || fufilledBy >= 2)){
-            throw new Error("Invalid number for fufilledBy")
+        if(!(fulfilledBy >= -1 || fulfilledBy >= 2)){
+            throw new Error("Invalid number for fulfilledBy")
         }
-        this.fufilled = fufilled;
-        this.fufilledBy = fufilledBy;
+        this.fulfilled = fulfilled;
+        this.fulfilledBy = fulfilledBy;
     }
 
-    public getIsFufilled(): boolean{
-        return this.fufilled
+    /**
+     * Checks if the needs of a tile bug are fulfilled.
+     * @returns boolean
+     */
+    public getIsFulfilled(): boolean{
+        return this.fulfilled
     }
 
-    public getFufilledBy(): number{
-        return this.fufilledBy;
+    /**
+     * Gives you the player number of the player who fulfilled the bug and therefore gets the points for it
+     * @returns number
+     */
+    public getFulfilledBy(): number{
+        return this.fulfilledBy;
     }
-
-
 }
 
 /*
 ideas for the colours could mean:
 
-scope creeep:
+scope creep:
 
 
 sloppy:
