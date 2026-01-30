@@ -93,7 +93,6 @@ export class DrawPile {
                     throw new Error("faulty random Number");
             }
         }
-
         //foodTiles yay
         this.sortedPile.push(new TileFood("crunch", 1, 1, 1))
 
@@ -135,10 +134,11 @@ export class DrawPile {
     }
 
     /**
-     * With this method players can draw tiles. The top tile of the draw pile is at index 0 of this.shuffledPile
+     * With this method players can draw tiles. The top tile of the draw pile is at index 0 of this.shuffledPile.
+     * The returned tiles are deleted from the shuffledPile
      * @param amount - Amount of tiles that should be drawn
      */
-    public getTilesFromPile(amount: number): Tile[]{
+    public getAndRemoveTilesFromPile(amount: number): Tile[]{
         if(amount > this.shuffledPile.length){
             throw new Error("Can't draw more cards than there are")
         }

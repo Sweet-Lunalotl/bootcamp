@@ -18,13 +18,14 @@ export class Player{
     }
 
     /**
-     * Adds tiles to inventory.
+     * Adds tiles to inventory. Deletes passed on Array.
      * @param tiles - Tiles that should be added
      */
-    public addToInventory(tiles: Tile[]): void{
+    public addToInventoryDeletesPassedOn(tiles: Tile[]): void{
         for(let i: number= 0; i < tiles.length; i++){
-            if(tiles.length > 0){
-                this.inventory.push(tiles.pop());
+            const currentTile: Tile | undefined = tiles.pop()
+            if (currentTile) {
+                this.inventory.push(currentTile);
             }
         }
     }
@@ -50,12 +51,18 @@ export class Player{
      * @param index - Index of the tile that should be removed and returned
      * @returns Tile
      */
-    public getFromInventory(index: number): Tile{
+    public getAndRemoveFromInventory(index: number): Tile{
         if(index > this.inventory.length -1){
             throw new Error("No Tile at index")
         }
         const temp: Tile[] = this.inventory.slice(index);
-        return temp.pop();
+        const currentTile: Tile | undefined = temp.pop()
+        if (currentTile) {
+            return currentTile;
+        }
+        else {
+            throw new Error("whyyyyy?")
+        }
     }
 
     /**

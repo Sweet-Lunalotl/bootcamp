@@ -14,17 +14,17 @@ function initGame(): void{
     //create Player 2
     playerTwo = new Player("Two", 2);
     //create Board
-    board = new Board(15, 9);
+    board = new Board(9, 4);
     //create starting Tile in the middle of Board
-    board.setField(Math.round(board.getWidth()/2), Math.round(board.getHeight()), new TileFood("start", 0, 0, 0))
+    board.setField(Math.round(board.getWidth()/2), Math.round(board.getHeight()/2), new TileFood("start", 0, 0, 0))
     //create draw pile
     drawPile = new DrawPile(50, 0.60);
     drawPile.fillDrawPile();
     //shuffel draw pile
     drawPile.shuffelDrawPile();
     //Handkarten ausgeben
-    playerOne.addToInventory(drawPile.getTilesFromPile(5));
-    playerTwo.addToInventory(drawPile.getTilesFromPile(5));
+    playerOne.addToInventoryDeletesPassedOn(drawPile.getAndRemoveTilesFromPile(5));
+    playerTwo.addToInventoryDeletesPassedOn(drawPile.getAndRemoveTilesFromPile(5));
     //Coin flip Startspieler (let Spielerin1amZug: boolean)
     if(Math.random() <= 0.5){
         playerOne.setChangeTurn();
@@ -62,13 +62,14 @@ function runGame(): void{
 
 function turn(activePlayer: Player): void{
     //nachziehen
-    activePlayer.addToInventory(drawPile.getTilesFromPile(1));
+    activePlayer.addToInventoryDeletesPassedOn(drawPile.getAndRemoveTilesFromPile(1));
     //Stein aus dem Inventar wählen und ablageort auf dem Spielfeld wählen
     //TODO irgendetwas damit man es tatsächlich wählen kann, gerade sind da magic numbers drin (1, 2 ,0)
     let tilePlaced: boolean = false;
     while (!tilePlaced){
+        //Nutzereingabe
         if(board.legalPlacement(1, 2)){
-            board.setField(1, 2, activePlayer.getFromInventory(0));
+            board.setField(1, 2, activePlayer.getAndRemoveFromInventory(0));
             tilePlaced = true;
         }
     }

@@ -10,6 +10,7 @@ export abstract class Tile{
     protected isLevel: number = 0;
     protected fulfilled: boolean = false;
     protected fulfilledBy: number = -1;
+    protected isBugFix: boolean = false;
 
     //Orange: stress
     //Blue: sloppy

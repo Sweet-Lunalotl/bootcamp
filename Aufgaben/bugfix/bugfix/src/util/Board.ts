@@ -65,7 +65,7 @@ export class Board{
     }
 
     /**
-     * Returns an Array with all the neighboring Tiles
+     * Returns an Array with all the neighboring Tiles as copies.
      * @param x - x of the field
      * @param y - y of the field
      * @returns Tile[]
