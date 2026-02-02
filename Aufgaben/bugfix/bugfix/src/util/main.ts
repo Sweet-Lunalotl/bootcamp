@@ -2,6 +2,8 @@ import {Board} from './Board.ts'
 import {DrawPile} from './DrawPile.ts'
 import {Player} from './Player.ts'
 import {TileFood} from "./TileFood.ts";
+import {TileBugFix} from './TileBugFix.ts'
+import {Tile} from "./Tile.ts";
 
 let board: Board;
 let drawPile: DrawPile;
@@ -25,6 +27,11 @@ function initGame(): void{
     //Handkarten ausgeben
     playerOne.addToInventoryDeletesPassedOn(drawPile.getAndRemoveTilesFromPile(5));
     playerTwo.addToInventoryDeletesPassedOn(drawPile.getAndRemoveTilesFromPile(5));
+    //bug fix austeilen
+    const bugfix1: Tile[] = [new TileBugFix("1")]
+    const bugfix2: Tile[] = [new TileBugFix("2")]
+    playerOne.addToInventoryDeletesPassedOn(bugfix1);
+    playerTwo.addToInventoryDeletesPassedOn(bugfix2);
     //Coin flip Startspieler (let Spielerin1amZug: boolean)
     if(Math.random() <= 0.5){
         playerOne.setChangeTurn();
@@ -53,6 +60,7 @@ function runGame(): void{
     //announce Winner *fireworks*
     console.log("And the winner is...")
     if(board.getScorePlayerOne() >= board.getScorePlayerTwo()){
+        //since playerTwo can score the first point, they have an advantage
         console.log(playerOne.getPlayerName());
     }
     else{
@@ -68,7 +76,7 @@ function turn(activePlayer: Player): void{
     let tilePlaced: boolean = false;
     while (!tilePlaced){
         //Nutzereingabe
-        if(board.legalPlacement(1, 2)){
+        if(board.legalPlacement(1, 2, activePlayer.getAndRemoveFromInventory(0))){
             board.setField(1, 2, activePlayer.getAndRemoveFromInventory(0));
             tilePlaced = true;
         }

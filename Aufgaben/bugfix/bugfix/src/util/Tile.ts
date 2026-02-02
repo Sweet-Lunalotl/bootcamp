@@ -18,7 +18,7 @@ export abstract class Tile{
 
     /**
      * Gives you the needs of any given tile as an Array with 4 elements
-     * @returns Array - Array with 4 elements
+     * @returns Array - Array with 4 elements with the needs in the Order Orange, Blue, Pink, Level.
      */
     public getNeeds(): number[]{
         const needs: number[] = [];
@@ -27,6 +27,20 @@ export abstract class Tile{
         needs.push(this.needsPink);
         needs.push(this.needsLevel);
         return needs;
+    }
+
+    /**
+     * Sets what Tiles the BugFix should delete.
+     * @param deletes - AArray with 4 elements with the needs in the Order Orange, Blue, Pink, Level.
+     */
+    public setBugFixDeletes(deletes: number[]): void{
+        if(!this.isBugFix){
+            throw new Error("You are only allowed to call this Method on TileBugFix")
+        }
+        this.needsOrange = deletes[0];
+        this.needsBlue = deletes[1];
+        this.needsPink = deletes[2];
+        this.needsLevel = deletes[3];
     }
 
     /**
@@ -93,6 +107,10 @@ export abstract class Tile{
      */
     public getFulfilledBy(): number{
         return this.fulfilledBy;
+    }
+
+    public getIsBugFix(): boolean{
+        return this.isBugFix;
     }
 }
 

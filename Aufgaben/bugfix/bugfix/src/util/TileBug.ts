@@ -9,7 +9,7 @@ export class TileBug extends Tile{
      * @param needsBlue - Amount of blue neighbors bug needs to be fulfilled
      * @param needsPink - Amount of pink neighbors bug needs to be fulfilled
      * @param needsLevel - minimum level of neighboring fulfilled bug, this bug needs to be fulfilled
-     * @param isLevel - level of the bug
+     * @param isLevel - level of the bug. If something has a level it must be a bug.
      */
     constructor(name: string, needsOrange: number, needsBlue: number, needsPink: number, needsLevel: number, isLevel: number) {
         super();

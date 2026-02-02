@@ -4,5 +4,11 @@ import {Tile} from "./Tile.ts";
 
 export class TileBugFix extends Tile{
 
+    constructor(name: string) {
+        super();
+        this.name = name;
+        this.isBugFix = true;
+    }
+
 
 }

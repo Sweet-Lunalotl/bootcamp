@@ -3,7 +3,7 @@ import {Tile} from './Tile.ts'
 export class Board{
     private readonly width: number;
     private readonly height: number;
-    private readonly board: Tile[][];
+    private board: any[][];
     private scorePlayerOne: number = 0;
     private scorePlayerTwo: number = 0;
 
@@ -50,13 +50,20 @@ export class Board{
     }
 
     /**
-     * Fill a specific field with a tile.
+     * Fill a specific field with a tile. When it's a BugFix the BugFix overwrites a TileBug and gets the has properties
+     * of Bug, so it can delete in the updateScore method TileFoods the deleted bug needed
      * @param x - X coordinate
      * @param y - y coordinate
      * @param tile - Tile Object
      */
     public setField(x: number, y: number, tile: Tile): void{
         if(x < this.width && y < this.height && x >= 0 && y >= 0){
+            //some weird stuff
+            if(tile.getIsBugFix()){
+                //looks complicated but I just write the properties o the bug tile into the BugFix tile
+                tile.setBugFixDeletes(this.board[y][x].getNeeds());
+                this.board[y][x]=tile;
+            }
             this.board[y][x] = tile;
         }
         else{
@@ -93,21 +100,30 @@ export class Board{
      * Can a Tile can be placed on this position?
      * @param x - x of the desired position
      * @param y - y of the desired position
+     * @param tile - The Tile that should be placed.
      * @returns Boolean - true: Placement is legal. false: placement is not legal
      */
-    public legalPlacement(x: number, y: number): boolean{
+    public legalPlacement(x: number, y: number, tile: Tile): boolean{
+        //if it is out of bounds it is nor allowed
         if(y >= this.height || x >= this.width || x < 0 || y < 0){
             return false;
         }
-        if(this.getField(x, y) != null){
-            return false;
+        //when the tile is either bug or food this is the part
+        if(!tile.getIsBugFix()){
+            if(this.getField(x, y) != null){
+                return false;
+            }
+            return this.getAdjacent(x, y).length > 0;
         }
-        return this.getAdjacent(x, y).length > 0;
+        else if (tile.getIsBugFix()){
+            return this.getField(x, y).getHasLvl();
+        }
+        return false;
     }
 
     /**
      * This is a Monster. Not a god, A MONSTER
-     * I chack for points and change stuff every turn, because I want to implement a bugfix later, which removes a bug/food and all/some adjacent tiles
+     * I check for points and change stuff every turn, because I want to implement a bugfix later, which removes a bug/food and all/some adjacent tiles
      *
      * @param activePlayer - Number of the active Player. playerOne: 1; playerTwo: 2.
      */
@@ -117,12 +133,40 @@ export class Board{
         }
         let scoreTempOne: number = 0
         let scoreTempTwo: number = 0
-        //durch alle Felder durchgehen
+        //durch alle Felder durchgehen und BugFix abhandeln
+        //Matrix to find all neighbours of given field     x   y    x    y   x   y    x  y
+        const neighbours: number[][]= [[-1, -1], [0, -1], [-1, 0], [1, 0], [-1, 1], [0, 1]]
+        //this looks terrifying, but all it does is iterating through the board, checking if the BugFix has properties
+        // it shares with neighbors, and therefore should be removed. After that the BugFix itself gets removes
+        for(let y: number = 0; y < this.height; y++) {
+            for (let x: number = 0; x < this.width; x++) {
+                if(this.board[y][x].getIsBugFix()){
+                    for(let j: number = 0; j < 6; j++){
+                        if(x + neighbours[j][0] < this.width && x + neighbours[j][0] < 0 &&
+                            y + neighbours[j][1] < this.height && y + neighbours[j][1] > 0 && this.board[y+neighbours[j][1]][x+neighbours[j][0]] != null){
+                                const neighborHas: number[] = this.board[y+neighbours[j][1]][x+neighbours[j][0]].getHas();
+                                const BugFixNeeds: number[] = this.board[y][x].getNeeds()
+                                let remove: boolean = false;
+                                for(let i: number = 0; i < 4; i++){
+                                    if(BugFixNeeds[i] === neighborHas[i]){
+                                        remove = true;
+                                    }
+                                }
+                                if(remove){
+                                    this.board[y+neighbours[j][1]][x+neighbours[j][0]] = null;
+                                }
+                        }
+                    }
+                    this.board[y][x] = null;
+                }
+            }
+        }
+        //durch alle Felder durchgehen und Punkte zählen
         for(let y: number = 0; y < this.height; y++){
             for(let x: number = 0; x < this.width; x++){
                 //board[y][x]
                 //                              only bugs have a lvl and can score points
-                if(this.board[y][x] != null && this.board[y][x].getHasLvl()){
+                if(this.board[y][x] != null && this.board[y][x].getHasLvl() && !this.board[y][x].getIsBugFix()){
                     const needs: number[] = this.board[y][x].getNeeds();
                     const adj: Tile[] = this.getAdjacent(x, y);
                     const addedHas: number[] = [0, 0, 0, 0];
