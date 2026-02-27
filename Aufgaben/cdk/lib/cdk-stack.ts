@@ -17,6 +17,7 @@ export class CdkStack extends cdk.Stack {
       const dynamo = new dynamodb.TableV2(this, "bootcamp-dynamo-demo", {
             partitionKey:  { name: 'SWBLuna-dynamo', type: dynamodb.AttributeType.STRING },
             removalPolicy: cdk.RemovalPolicy.DESTROY,
+          tableName: "SWBLuna-dynamo",
       })
 
       const testFunction = new NodejsFunction(this, 'swblunademofunction', {
